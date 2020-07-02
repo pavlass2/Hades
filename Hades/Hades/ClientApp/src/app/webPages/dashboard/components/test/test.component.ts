@@ -18,6 +18,7 @@ export class TestComponent implements OnInit {
 
   soucetFrontend :number;
   soucetBackend: number;
+  testVar: string;
   
   inputField = {
     input1: 2,
@@ -33,6 +34,13 @@ export class TestComponent implements OnInit {
 
     this.backendcall.getAdd(this.inputField.input1, this.inputField.input2).subscribe( sum => {
       console.log(sum);
+    },
+    (error) => {
+      console.log(error);
+    })
+
+    this.backendcall.testCall().subscribe( res => {
+      this.testVar = res;
     },
     (error) => {
       console.log(error);

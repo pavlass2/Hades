@@ -16,5 +16,9 @@ export class BackendcallService {
     return this.httpClient.post<number>(apiUrl + '/api/Sum/Add', {input1, input2});
   }
 
+  testCall(){
+    return this.httpClient.get(apiUrl + '/api/Sum/Index', {responseType: 'text'});
+  }
+
 
 }
