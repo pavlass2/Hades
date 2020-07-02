@@ -13,7 +13,7 @@ export class BackendcallService {
 
   getAdd(input1: number, input2:number){
     console.log(apiUrl);
-    return this.httpClient.post<number>(apiUrl + 'sum', {input1, input2});
+    return this.httpClient.post<number>(apiUrl + 'sum/post', {input1, input2});
   }
 
 
