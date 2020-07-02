@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Hades.Controllers
 {    
+    
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class SumController : ControllerBase
@@ -24,6 +25,11 @@ namespace Hades.Controllers
         {
             _logger.LogInformation("Scitam " + a + " + " + b);
             return a + b;
+        }
+
+        public string Index()
+        {
+            return "Hello World!";
         }
     }
 }
