@@ -34,6 +34,7 @@ export class TestComponent implements OnInit {
 
     this.backendcall.getAdd(this.inputField.input1, this.inputField.input2).subscribe( sum => {
       console.log(sum);
+      this.soucetBackend = sum;
     },
     (error) => {
       console.log(error);
