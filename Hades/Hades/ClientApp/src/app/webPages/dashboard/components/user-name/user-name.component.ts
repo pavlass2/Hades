@@ -37,6 +37,7 @@ export class UserNameComponent implements OnInit {
     if(this.cookie.check("groupNameCookie")){
       var groupName = this.cookie.get("groupNameCookie");
     }
+    this.cookie.set("userNameCookie", this.userName);
 
     this.toust.showSuccess();
     this.backendCall.setUserName(this.userName, groupName).subscribe(res => {

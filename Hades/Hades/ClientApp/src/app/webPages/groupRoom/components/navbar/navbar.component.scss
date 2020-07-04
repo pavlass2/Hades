@@ -1,0 +1,48 @@
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  .topnav {
+    overflow: hidden;
+    background-color: #333;
+    list-style:none;
+  }
+  
+  .topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  
+  .groupName {
+    background-color: rgba(108,0,203,1);
+    color: white;
+  }
+
+  .userName {
+    background-color: rgba(108,0,203,1);
+    color: white;
+  }
+  
+  /* Right-aligned section inside the top navigation */
+  .topnav-right {
+    float: right;
+  }
+  
+  /* Container holding the image and the text */
+  .container {
+    position: relative;
+    text-align: center;
+    color: black;
+  }
+  
+  
+  
+  
+  
+  

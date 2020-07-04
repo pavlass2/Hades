@@ -12,6 +12,8 @@ const routes: Routes = [
   { path: "main/createGroup", component:  CreateGroupComponent},
   { path: "main/joinGroup", component:  JoinGroupComponent},
   { path: "main/userName", component:  UserNameComponent},
+
+   
   { path: "mainRoom", component: MainRoomComponent}
 ];
 
