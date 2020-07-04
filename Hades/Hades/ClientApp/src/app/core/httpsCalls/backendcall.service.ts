@@ -11,14 +11,16 @@ export class BackendcallService {
     private httpClient: HttpClient,
   ) { }
 
-  getAdd(input1: number, input2:number){
-    console.log(input1);
-    console.log(input2);
-    return this.httpClient.post<number>(apiUrl + '/api/Sum/Add', {input1, input2});
+  createGroup(userName: string, groupName: string , groupDescription: string){
+    return this.httpClient.post(apiUrl + '/api/Group/CreateGroup', {userName, groupName , groupDescription})
   }
 
-  testCall(){
-    return this.httpClient.get(apiUrl + '/api/Sum/Index', {responseType: 'text'});
+  joinGroup(groupName: string){
+    return this.httpClient.post(apiUrl + '/api/Group/JoinGroup', {groupName})
+  }
+
+  setUserName(userName: string, groupName: string){
+    return this.httpClient.post(apiUrl + '/api/Group/SetUsernameForGroup', {userName, groupName})
   }
 
 

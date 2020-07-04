@@ -1,0 +1,20 @@
+<div class="box">
+    <div class="buttonPosition">
+        
+        <div class="formBox buttonPosition">
+            <form #f="ngForm" class="form-group" (ngSubmit)="onSubmit()" autocomplete="off">
+                <p>
+                    <label><b>{{ inputText }} &nbsp; </b></label>
+                    <input type="text" name="input1" class="form-control"  [(ngModel)]="groupName" required>
+                </p>
+    
+    
+                <p class="text-center">
+                    <button type="submit" class="btn btn-info" [disabled]="!f.valid"> {{ send }}</button>
+                </p>
+    
+            </form>
+        </div>
+
+    </div>
+</div>
