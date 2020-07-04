@@ -8,5 +8,9 @@ namespace Hades.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public ICollection<StudentGroup> ParticipatesInGroups { get; set; }
+
+        public ApplicationUser()
+        {}
     }
 }

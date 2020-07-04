@@ -23,7 +23,7 @@ namespace Hades.Controllers
         }
 
         [HttpPost]
-        public int? Add(JsonElement values)
+        public IActionResult Add(JsonElement values)
         {
             // Input variables
             int? input1 = null;
@@ -55,13 +55,13 @@ namespace Hades.Controllers
             {
                 // If everything went smoothly, return result.
                 _logger.LogInformation("Scitam " + input1 + " + " + input2 + " = " + (input1 + input2));
-                return input1 + input2;
+                return new JsonResult(input1 + input2);
             }
             else
             {
                 // Log errors and return null.
                 _logger.LogWarning("One or multiple errors have occurred during \"add\" operation.");
-                return null;
+                return StatusCode(500);
             }            
         }
 
