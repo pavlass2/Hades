@@ -54,18 +54,23 @@ namespace Hades.Controllers
             {
                 exceptionText = "Paremeters passed from frontend are of a wrong kind.";
                 logger.LogError(ex, exceptionText, requestData);
-            }
+            }            
 
             if (exceptionText == null)
             {
+                if (dbDataProvider.DoesGroupExist(groupName))
+                {
+                    return new JsonResult(false);
+                }
+
                 ApplicationUser applicationUser = new ApplicationUser();
                 applicationUser.UserName = groupFounderUserName;
 
-                Group group = new Group(groupName, applicationUser, groupDescription);
+                Group group = new Group(groupName, applicationUser, groupDescription);                
 
                 await dbDataProvider.CreateGroupAsync(group, applicationUser);
                 
-                return StatusCode(200);
+                return new JsonResult(true);
             }
             else
             {
