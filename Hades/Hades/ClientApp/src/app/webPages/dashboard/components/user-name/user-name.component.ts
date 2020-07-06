@@ -40,7 +40,7 @@ export class UserNameComponent implements OnInit {
       
       if(res){
         this.cookie.set("userNameCookie", this.userName);
-        this.toust.showSuccess("Vítejte", "Aktuální místnost:" + groupName);
+        this.toust.showSuccess("Vítejte", "Aktuální místnost: " + groupName);
         this.router.navigate(['mainRoom']);
       }else{
         this.toust.showError("An error!", "Be kind and try again laler!");
