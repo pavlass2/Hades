@@ -4,6 +4,7 @@ import { Title } from '@angular/platform-browser';
 import { ToastrServiceService } from 'src/app/core/notifications/toastr-service.service';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { VirtualTimeScheduler } from 'rxjs';
 
 @Component({
   selector: 'app-join-group',
@@ -30,21 +31,19 @@ export class JoinGroupComponent implements OnInit {
   }
 
   onSubmit(){
-    this.toust.showSuccess();
 
-    //tohle pak půdje do backendCallu
-    this.cookie.set("groupNameCookie", this.groupName);
-    
-    console.log(this.groupName);
     this.backendCall.joinGroup(this.groupName).subscribe(res => {
-      console.log(res);
-
-
-      // pokud to dopadne, přesměruj se na zadání username
-      this.router.navigate(["main/userName"]);
+      if(res){
+        this.cookie.set("groupNameCookie", this.groupName);
+        this.toust.showSuccess("Skupina existuje!", " ");
+        this.router.navigate(["main/userName"]);
+      }else{
+        this.toust.showError("Skupina neexistuje!", "Zadej platný název skupiny");
+      }
     },
     (error) => {
       console.log(error);
+      this.toust.showError("An error!", "Be kind and try again laler!");
     });
 
   }

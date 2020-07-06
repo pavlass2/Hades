@@ -30,24 +30,25 @@ export class UserNameComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.userName);
-
-    //tohle pak půdje co backendCallu
-    
     if(this.cookie.check("groupNameCookie")){
       var groupName = this.cookie.get("groupNameCookie");
     }
-    this.cookie.set("userNameCookie", this.userName);
+    
 
-    this.toust.showSuccess();
     this.backendCall.setUserName(this.userName, groupName).subscribe(res => {
       console.log(res);
-      this.cookie.set("userNameCookie", this.userName);
-
-      this.router.navigate(['mainRoom']);
+      
+      if(res){
+        this.cookie.set("userNameCookie", this.userName);
+        this.toust.showSuccess("Vítejte", "Aktuální místnost:" + groupName);
+        this.router.navigate(['mainRoom']);
+      }else{
+        this.toust.showError("An error!", "Be kind and try again laler!");
+      }
     },
     (error) => {
       console.log(error);
+      this.toust.showError("An error!", "Be kind and try again laler!");
     });
 
   }

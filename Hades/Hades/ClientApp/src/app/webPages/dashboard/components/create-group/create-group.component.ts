@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { BackendcallService } from '../../../../core/httpsCalls/backendcall.service'
 import { Title } from '@angular/platform-browser';
 import { ToastrServiceService } from "../../../../core/notifications/toastr-service.service"
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-create-group',
@@ -28,7 +30,9 @@ export class CreateGroupComponent implements OnInit {
   constructor(
     private backendCall: BackendcallService,
     private title: Title,
-    private toastr: ToastrServiceService
+    private toastr: ToastrServiceService,
+    private router: Router,
+    private cookie: CookieService
   ) { }
 
   ngOnInit(): void {
@@ -38,13 +42,20 @@ export class CreateGroupComponent implements OnInit {
 
 
   onSubmit(){
-    this.toastr.showSuccess();
     console.log(this.inputField);
     this.backendCall.createGroup(this.inputField.userName, this.inputField.groupName, this.inputField.groupDescription).subscribe( res => {
-      console.log(res)
+      if(res){
+        this.toastr.showSuccess("Skupina vytvořena!", "Nyní můžete využívat všechny možnosti!");
+        this.cookie.set("userNameCookie", this.inputField.userName);
+        this.cookie.set("groupNameCookie", this.inputField.groupName);
+        this.router.navigate(['mainRoom']);
+      }else{
+        this.toastr.showError("Chyba!", "Skupina nebyla vytvořena!");
+      }
     },
     (error) => {
       console.log(error);
+      this.toastr.showError("An error!", "Be kind and try again laler!");
     });
   }
 
