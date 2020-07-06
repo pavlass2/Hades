@@ -47,6 +47,19 @@ namespace Hades.Data
 
         public async Task AddAplicationUserAsync(ApplicationUser applicationUser)
         {
+            // Use NickName as UserName
+            string consideredUserName = applicationUser.NickName;
+            int counter = 0;
+            // If this username is already taken, add number
+            while (await GetApplicationUserAsync(consideredUserName) != null)
+            {
+                // Try it again but with a number
+                consideredUserName = applicationUser.NickName + counter.ToString();
+                
+                // If we run this again, we need the number incremented to try another username variant
+                counter++;
+            }
+            applicationUser.UserName = consideredUserName;
             await userManager.CreateAsync(applicationUser);
         }
 
@@ -68,11 +81,8 @@ namespace Hades.Data
                 Student = student,
                 StudentId = student.Id
             };
-            group.Students.Add(studentGroup);
-            student.ParticipatesInGroups.Add(studentGroup);
 
-            applicationDbContext.Attach(group).State = EntityState.Modified;
-            applicationDbContext.Attach(student).State = EntityState.Modified;
+            applicationDbContext.StudentGroup.Add(studentGroup);           
             await applicationDbContext.SaveChangesAsync();
         }
 

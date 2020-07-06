@@ -21,6 +21,9 @@ namespace Hades.Data
         public DbSet<ApplicationUser> Users { get; set; }
         public DbSet<Group> Groups { get; set; }
 
+        //Join table
+        public DbSet<StudentGroup> StudentGroup { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Student-group join

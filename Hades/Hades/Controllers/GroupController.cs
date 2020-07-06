@@ -154,10 +154,10 @@ namespace Hades.Controllers
             if (exceptionText == null)
             {
                 ApplicationUser applicationUser = new ApplicationUser();
-                applicationUser.UserName = userName;
+                applicationUser.NickName = userName;
 
                 await dbDataProvider.AddStudentToAGroupAsync(applicationUser, groupName);
-                return StatusCode(200);
+                return new JsonResult(true);
             }
             else
             {
