@@ -2,7 +2,10 @@
 <div class="topnav">
   <a class="groupName">{{ groupName }}</a>
   <a href="">Clickable button!</a>
+
+
   <div class = "topnav-right">
-    <a class="userName">{{ userName }}</a>
+    <a href="javascript:;" class="button" (click)="closeGroup();">{{ close }}</a>
+    <a class="userName" (click)="closeGroup();">{{ userName }}</a>
   </div>
 </div>

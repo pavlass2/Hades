@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -10,12 +11,14 @@ export class NavbarComponent implements OnInit {
 
   groupText = "Místnost: ";
   userText = "Uživatel:  ";
+  close = "Odejít";
 
   groupName: string;
   userName: string;
 
   constructor(
-    private cookie: CookieService
+    private cookie: CookieService,
+    private router: Router
   ) { }
 
 
@@ -32,6 +35,11 @@ export class NavbarComponent implements OnInit {
       this.userName = this.userText + "ERROR";
     }
 
+  }
+
+  closeGroup(){
+    this.cookie.deleteAll();
+    this.router.navigate(["/main"]);
   }
 
 }
