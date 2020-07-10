@@ -64,7 +64,7 @@ namespace Hades.Controllers
                 await dbDataProvider.CreateGroupAsync(group, applicationUser);
 
                 logger.LogInformation("Creating group: " + groupName);
-                return new JsonResult(true);
+                return new JsonResult(new { Result = true });
             }
             else
             {
@@ -91,7 +91,7 @@ namespace Hades.Controllers
                 // Check if group already exists
                 groupName = (string)result["groupName"];
                 logger.LogInformation("Group existence check: " + groupName);
-                return new JsonResult(dbDataProvider.DoesGroupExist(groupName));
+                return new JsonResult(new { Result = dbDataProvider.DoesGroupExist(groupName) });
             }
             else
             {
@@ -125,7 +125,7 @@ namespace Hades.Controllers
                 // Add the new user to the group
                 await dbDataProvider.AddStudentToAGroupAsync(applicationUser, groupName);
                 logger.LogInformation("Group existence check: " + groupName);
-                return new JsonResult(true);
+                return new JsonResult(new { Result = true });
             }
             else
             {
