@@ -1,80 +1,75 @@
 ﻿using Hades.Data;
 using Hades.Models;
-using Microsoft.AspNetCore.Identity;
+using Hades.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Hades.Controllers
 {
+    /// <summary>
+    /// Takes care of groups, messages and students participating in groups 
+    /// </summary>
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class GroupController : ControllerBase
     {
         private ILogger<GroupController> logger;
         private DbDataProvider dbDataProvider;
-        public GroupController(ILogger<GroupController> logger, DbDataProvider dbDataProvider)
+        private ControllerUtils controllerUtils;
+
+        public GroupController(ILogger<GroupController> logger, DbDataProvider dbDataProvider, ControllerUtils controllerUtils)
         {
             this.logger = logger;
             this.dbDataProvider = dbDataProvider;
+            this.controllerUtils = controllerUtils;
         }
 
+        /// <summary>
+        /// Creates group
+        /// </summary>
+        /// <param name="requestData">Data necessary to create group</param>
+        /// <returns>False if group with this name already exists, true if creation was successful.</returns>
         [HttpPost]
         public async Task<IActionResult> CreateGroup(JsonElement requestData)
         {
-            string groupName = null;
-            string groupFounderUserName = null;
-            string groupDescription = null;
-
-            string exceptionText = null;
-
-            try
+            // Unwrap data
+            Dictionary<string, Type> input = new Dictionary<string, Type> { 
+                { "groupName", typeof(string) },
+                { "userName", typeof(string) },
+                { "groupDescription", typeof(string) }
+            };
+            Dictionary<string, object> result = controllerUtils.UnwrapJsonRequest(input, requestData);           
+                        
+            if (result != null)
             {
-                // Unwrap into separate JSONs.
-                JsonElement groupNameJson = requestData.GetProperty("groupName");
-                JsonElement groupFounderUserNameJson = requestData.GetProperty("userName");
-                JsonElement groupDescriptionJson = requestData.GetProperty("groupDescription");
-
-                groupName = groupNameJson.GetString();
-                groupFounderUserName = groupFounderUserNameJson.GetString();
-                groupDescription = groupDescriptionJson.GetString();
-            }
-            catch (KeyNotFoundException ex)
-            {
-                exceptionText = "Paremeters passed from frontend are not correctly named.";
-                logger.LogError(ex, exceptionText, requestData);
-            }
-            catch (InvalidOperationException ex)
-            {
-                exceptionText = "Paremeters passed from frontend are of a wrong kind.";
-                logger.LogError(ex, exceptionText, requestData);
-            }            
-
-            if (exceptionText == null)
-            {
+                string groupName = (string)result["groupName"];
+                // Check if is the desired groupName available
                 if (dbDataProvider.DoesGroupExist(groupName))
                 {
                     return new JsonResult(false);
                 }
 
+                // Proceed with founding user creation
                 ApplicationUser applicationUser = new ApplicationUser();
-                applicationUser.UserName = groupFounderUserName;
+                applicationUser.NickName = (string)result["userName"];
 
-                Group group = new Group(groupName, applicationUser, groupDescription);                
+                // Proceed with group creation
+                Group group = new Group(groupName, applicationUser, (string)result["groupDescription"]);
 
+                // Create group (it also creates user)
                 await dbDataProvider.CreateGroupAsync(group, applicationUser);
-                
+
+                logger.LogInformation("Creating group: " + groupName);
                 return new JsonResult(true);
             }
             else
             {
-                return new JsonResult(exceptionText);
+                logger.LogError("Error occurred during group creation.");
+                return new JsonResult("Error occurred during group creation.");
             }
         }
 
@@ -84,94 +79,63 @@ namespace Hades.Controllers
         /// <param name="requestData">key word</param>
         /// <returns>is user allowed to join</returns>
         [HttpPost]
-        public IActionResult JoinGroup(JsonElement requestData)
+        public IActionResult IsGroupNameValid(JsonElement requestData)
         {
-            // zkontroluj ze jmeno skupiny existuje
+            string groupName = "";
+            // Unwrap data
+            Dictionary<string, Type> input = new Dictionary<string, Type> { { "groupName", groupName.GetType() } };
+            Dictionary<string, object> result = controllerUtils.UnwrapJsonRequest(input, requestData);
 
-            string groupName = null;
-            string exceptionText = null;
-            try
+            if (result != null)
             {
-                // Unwrap into separate JSONs.
-                JsonElement groupNameJson = requestData.GetProperty("groupName");
-
-                groupName = groupNameJson.GetString();
-            }
-            catch (KeyNotFoundException ex)
-            {
-                exceptionText = "Paremeters passed from frontend are not correctly named.";
-                logger.LogError(ex, exceptionText, requestData);
-            }
-            catch (InvalidOperationException ex)
-            {
-                exceptionText = "Paremeters passed from frontend are of a wrong kind.";
-                logger.LogError(ex, exceptionText, requestData);
-            }
-
-            if (exceptionText == null)
-            {
+                // Check if group already exists
+                groupName = (string)result["groupName"];
+                logger.LogInformation("Group existence check: " + groupName);
                 return new JsonResult(dbDataProvider.DoesGroupExist(groupName));
             }
             else
             {
-                return new JsonResult(exceptionText);
+                logger.LogError("Error occurred during group existence check.");
+                return new JsonResult("Error occurred during group existence check.");
             }
         }
 
         /// <summary>
-        /// Sets username for group
+        /// Sets username for group for anonymous user
         /// </summary>
         /// <param name="userNameData">User name and group name</param>
         /// <returns>was everything ok?</returns>
         [HttpPost]
         public async Task<IActionResult> SetUserNameForGroup(JsonElement requestData)
         {
-            //pridat uzivateli jmeno
+            // Unwrap data
+            Dictionary<string, Type> input = new Dictionary<string, Type> {
+                { "groupName", typeof(string) },
+                { "userName", typeof(string) }
+            };
+            Dictionary<string, object> result = controllerUtils.UnwrapJsonRequest(input, requestData);
 
-            string userName = null;
-            string groupName = null;
-            string exceptionText = null;
-            try
+            if (result != null)
             {
-                // Unwrap into separate JSONs.
-                JsonElement userNameJson = requestData.GetProperty("userName");
-                JsonElement groupNameJson = requestData.GetProperty("groupName");
-
-                groupName = groupNameJson.GetString();
-                userName = userNameJson.GetString();
-            }
-            catch (KeyNotFoundException ex)
-            {
-                exceptionText = "Paremeters passed from frontend are not correctly named.";
-                logger.LogError(ex, exceptionText, requestData);
-            }
-            catch (InvalidOperationException ex)
-            {
-                exceptionText = "Paremeters passed from frontend are of a wrong kind.";
-                logger.LogError(ex, exceptionText, requestData);
-            }
-
-            if (exceptionText == null)
-            {
+                string groupName = (string)result["groupName"];
+                // Create new user
                 ApplicationUser applicationUser = new ApplicationUser();
-                applicationUser.NickName = userName;
+                applicationUser.NickName = (string)result["userName"];
 
+                // Add the new user to the group
                 await dbDataProvider.AddStudentToAGroupAsync(applicationUser, groupName);
+                logger.LogInformation("Group existence check: " + groupName);
                 return new JsonResult(true);
             }
             else
             {
-                return new JsonResult(exceptionText);
+                logger.LogError("Error occurred during new user creation.");
+                return new JsonResult("Error occurred during new user creation.");
             }
         }
 
         /*TODO
-         * Prejmenovat JoinGroup() na neco prihodnejsiho, nakonec totiz bude jen kontrolovat, zda skupina existuje, treba DoesGroupExis
-         * Dale prejmenovat SetUserNameForGroup(), protoze tohle bude ve skutecnosti okamzik pripojeni
-         * Co kdyz se uzivatel chce pripojit do skupiny, ktere neexistuje?
-         * Co kdyz uzivatel vytvari skupinu se jmenem jejiz jmeno uz je pouzito?
          * Co kdyz si uzivatel zvoli stejne uzivatelske jmeno, jako nekdo v groupe uz ma?
-         * V bDataProvider.AddStudentToAGroupAsync otestovat ktery update bude fungovat, zda vubec nejaky
          */
     }
 }

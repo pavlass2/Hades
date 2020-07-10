@@ -19,6 +19,12 @@ namespace Hades.Data
             this.userManager = userManager;
         }
 
+        /// <summary>
+        /// Adds a new user and a group (supposedly with him as a founder).
+        /// </summary>
+        /// <param name="group">Group to add.</param>
+        /// <param name="groupFounder">Groups founder (who is already added in Group as founder).</param>
+        /// <returns>void</returns>
         public async Task CreateGroupAsync(Group group, ApplicationUser groupFounder)
         {
             await AddAplicationUserAsync(groupFounder);
@@ -27,11 +33,21 @@ namespace Hades.Data
             await applicationDbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Gets a group.
+        /// </summary>
+        /// <param name="groupName">Name of the group to get.</param>
+        /// <returns>Founded group.</returns>
         public Group GetGroup(string groupName)
         {
             return applicationDbContext.Groups.FirstOrDefault(g => g.Name.Equals(groupName));
         }
 
+        /// <summary>
+        /// Checks if group already exists.
+        /// </summary>
+        /// <param name="groupName">Name of the group to check.</param>
+        /// <returns></returns>
         public bool DoesGroupExist(string groupName)
         {
             if (GetGroup(groupName) == null)
@@ -45,29 +61,45 @@ namespace Hades.Data
         }
 
 
+        /// <summary>
+        /// Creates new user with a userName "generated" from his nickname.
+        /// </summary>
+        /// <param name="applicationUser">Application user to add.</param>
+        /// <returns>void</returns>
         public async Task AddAplicationUserAsync(ApplicationUser applicationUser)
         {
-            // Use NickName as UserName
+            // Use NickName as UserName.
             string consideredUserName = applicationUser.NickName;
             int counter = 0;
-            // If this username is already taken, add number
+            // If this username is already taken, add number.
             while (await GetApplicationUserAsync(consideredUserName) != null)
             {
-                // Try it again but with a number
+                // Try it again but with a number.
                 consideredUserName = applicationUser.NickName + counter.ToString();
                 
-                // If we run this again, we need the number incremented to try another username variant
+                // If we run this again, we need the number incremented to try another username variant.
                 counter++;
             }
             applicationUser.UserName = consideredUserName;
             await userManager.CreateAsync(applicationUser);
         }
 
+        /// <summary>
+        /// Gets ApplicationUser.
+        /// </summary>
+        /// <param name="userName">Username of the ApplicationUser to find.</param>
+        /// <returns>Founded application user.</returns>
         public async Task<ApplicationUser> GetApplicationUserAsync(string userName)
         {
             return await userManager.FindByNameAsync(userName);
         }
 
+        /// <summary>
+        /// Adds an ApplicationUser and adds him as a student to a group
+        /// </summary>
+        /// <param name="student">Student to add.</param>
+        /// <param name="groupName">Group name to add the student to.</param>
+        /// <returns>void</returns>
         public async Task AddStudentToAGroupAsync(ApplicationUser student, string groupName)
         {
             Group group = GetGroup(groupName);

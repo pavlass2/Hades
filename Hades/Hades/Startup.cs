@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using Hades.Utils;
 
 namespace Hades
 {
@@ -31,6 +32,7 @@ namespace Hades
                 options.UseMySql(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<DbDataProvider>();
+            services.AddScoped<ControllerUtils>();
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
