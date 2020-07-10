@@ -39,6 +39,8 @@ export class UserNameComponent implements OnInit {
       if(res.result){
         this.cookie.delete("userNameCookie");
         this.cookie.set("userNameCookie", this.userName);
+        this.cookie.delete("userId");
+        this.cookie.set("userId", res.userId);
         this.toust.showSuccess("Vítejte", "Aktuální místnost: " + groupName);
         this.router.navigate(['mainRoom']);
       }else{
