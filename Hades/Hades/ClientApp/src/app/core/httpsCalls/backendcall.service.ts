@@ -16,11 +16,11 @@ export class BackendcallService {
   }
 
   joinGroup(groupName: string){
-    return this.httpClient.post(apiUrl + '/api/Group/JoinGroup', {groupName})
+    return this.httpClient.post(apiUrl + '/api/Group/IsGroupNameValid', {groupName})
   }
 
   setUserName(userName: string, groupName: string){
-    return this.httpClient.post(apiUrl + '/api/Group/SetUsernameForGroup', {userName, groupName})
+    return this.httpClient.post(apiUrl + '/api/Group/AddStudentToGroup', {userName, groupName})
   }
 
 
