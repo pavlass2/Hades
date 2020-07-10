@@ -44,18 +44,20 @@ export class CreateGroupComponent implements OnInit {
   onSubmit(){
     console.log(this.inputField);
     this.backendCall.createGroup(this.inputField.userName, this.inputField.groupName, this.inputField.groupDescription).subscribe( res => {
-      if(res){
+      console.log(res.result);
+      if(res.result){
+        console.log(res);
         this.toastr.showSuccess("Skupina vytvořena!", "Nyní můžete využívat všechny možnosti!");
         this.cookie.set("userNameCookie", this.inputField.userName);
         this.cookie.set("groupNameCookie", this.inputField.groupName);
         this.router.navigate(['mainRoom']);
       }else{
-        this.toastr.showError("Chyba!", "Skupina nebyla vytvořena!");
+        this.toastr.showError("Chyba!", res.message);
       }
     },
     (error) => {
       console.log(error);
-      this.toastr.showError("An error!", "Be kind and try again laler!");
+      this.toastr.showError("An error!", "Be kind and try again later!");
     });
   }
 

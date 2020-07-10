@@ -36,9 +36,7 @@ export class UserNameComponent implements OnInit {
     
 
     this.backendCall.setUserName(this.userName, groupName).subscribe(res => {
-      console.log(res);
-      
-      if(res){
+      if(res.result){
         this.cookie.delete("userNameCookie");
         this.cookie.set("userNameCookie", this.userName);
         this.toust.showSuccess("Vítejte", "Aktuální místnost: " + groupName);
@@ -49,7 +47,7 @@ export class UserNameComponent implements OnInit {
     },
     (error) => {
       console.log(error);
-      this.toust.showError("An error!", "Be kind and try again laler!");
+      this.toust.showError("An error!", "Be kind and try again later!");
     });
 
   }

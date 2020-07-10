@@ -33,7 +33,7 @@ export class JoinGroupComponent implements OnInit {
   onSubmit(){
 
     this.backendCall.joinGroup(this.groupName).subscribe(res => {
-      if(res){
+      if(res.result){
         this.cookie.set("groupNameCookie", this.groupName);
         this.toust.showSuccess("Skupina existuje!", " ");
         this.router.navigate(["main/userName"]);
@@ -43,7 +43,7 @@ export class JoinGroupComponent implements OnInit {
     },
     (error) => {
       console.log(error);
-      this.toust.showError("An error!", "Be kind and try again laler!");
+      this.toust.showError("An error!", "Be kind and try again later!");
     });
 
   }
