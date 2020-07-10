@@ -1,2 +1,8 @@
-
-INPUT MESSAGE
+<div>
+    <form #f="ngForm" class="form-group" (ngSubmit)="onSubmit(f)" autocomplete="off">
+        <p >
+            <input type="text" name="inpitMessage" class="form-control"  class="message" [(ngModel)]="inputMessage" required>
+            <input type="submit" style="visibility: hidden;">
+        </p>
+    </form>
+</div>

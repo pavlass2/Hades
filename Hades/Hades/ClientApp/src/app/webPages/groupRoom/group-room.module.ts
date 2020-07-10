@@ -8,17 +8,20 @@ import { MainRoomComponent } from './components/main-room/main-room.component';
 import { WorkingSpaceComponent } from './components/working-space/working-space.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { MessageInputComponent } from './components/message-input/message-input.component';
+import { FormsModule } from '@angular/forms';
+import { ChatWindowComponent } from './components/chat-window/chat-window.component';
 
 
 @NgModule({
   declarations: [
     MainRoomComponent, 
     NavbarComponent, 
-    FooterComponent, WorkingSpaceComponent, UserListComponent, MessageInputComponent
+    FooterComponent, WorkingSpaceComponent, UserListComponent, MessageInputComponent, ChatWindowComponent
   ],
   imports: [
     CommonModule,
-    GroupRoomRoutingModule
+    GroupRoomRoutingModule,
+    FormsModule
   ]
 })
 export class GroupRoomModule { }

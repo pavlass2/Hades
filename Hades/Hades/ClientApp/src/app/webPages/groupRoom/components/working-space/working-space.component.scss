@@ -40,8 +40,16 @@
   .messageBox{
     position: fixed;
     height: 3vw;
-    width: 100%;
-    bottom: 0px;
+    width: 88vw;
+    bottom: 30px;
     margin-left: 12vw;
-    background-color: red;
+  }
+
+  .chatWindow{
+    padding: 10px;
+    left: 12vw;
+    height:  calc(88vh - 30px);
+    width: 88vw;
+    background-color: blueviolet;
+    position: fixed;
   }
