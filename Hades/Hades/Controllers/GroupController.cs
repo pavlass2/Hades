@@ -103,10 +103,10 @@ namespace Hades.Controllers
         /// <summary>
         /// Sets username for group for anonymous user
         /// </summary>
-        /// <param name="userNameData">User name and group name</param>
+        /// <param name="requestData">User name and group name</param>
         /// <returns>was everything ok?</returns>
         [HttpPost]
-        public async Task<IActionResult> SetUserNameForGroup(JsonElement requestData)
+        public async Task<IActionResult> AddStudentToGroup(JsonElement requestData)
         {
             // Unwrap data
             Dictionary<string, Type> input = new Dictionary<string, Type> {
