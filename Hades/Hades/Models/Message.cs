@@ -11,5 +11,15 @@ namespace Hades.Models
         public ApplicationUser Author { get; set; }
         public Group PostedInGroup { get; set; }
         public string TextContent { get; set; }
+
+        public Message()
+        {}
+
+        public Message(ApplicationUser author, Group postedInGroup, string textContent)
+        {
+            Author = author;
+            PostedInGroup = postedInGroup;
+            TextContent = textContent;
+        }
     }
 }

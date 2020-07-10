@@ -134,6 +134,8 @@ namespace Hades.Controllers
             }
         }
 
+
+
         /*TODO
          * Co kdyz si uzivatel zvoli stejne uzivatelske jmeno, jako nekdo v groupe uz ma?
          */

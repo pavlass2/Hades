@@ -123,6 +123,12 @@ namespace Hades.Data
             return addedStudent;
         }
 
+        public async Task AddMessageAsync(Message message)
+        {
+            applicationDbContext.Messages.Add(message);
+            await applicationDbContext.SaveChangesAsync();
+        }
+
         
     }
 }
