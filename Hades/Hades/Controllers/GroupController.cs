@@ -50,7 +50,7 @@ namespace Hades.Controllers
                 // Check if is the desired groupName available
                 if (dbDataProvider.DoesGroupExist(groupName))
                 {
-                    return new JsonResult(false);
+                    return new JsonResult(new { Result = false, Message = "Group with this name already exists." });
                 }
 
                 // Proceed with founding user creation
