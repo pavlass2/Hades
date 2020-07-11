@@ -6,4 +6,10 @@ export class Message
     groupName: string;
     type: string;
     date: string;
+    value:{
+       message: string;
+       nickName: string;
+       type: string;
+       userId: string;
+    }
    }  

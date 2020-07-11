@@ -3,6 +3,7 @@ import { Message } from '../../../../core/models/chatModel';
 import { ChatService } from '../../../../core/signalR/chat.service';  
 import { MessageStorageService } from 'src/app/core/services/messageArray/message-storage.service';
 import { Router, NavigationEnd } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'chat-window',
@@ -15,13 +16,15 @@ export class ChatWindowComponent implements OnInit{
   message = new Message();  
   refreshIntervalId;
   mySubscription: any;
+  userId: string;
 
 
 
   constructor(
     private chatService: ChatService,  
     private _ngZone: NgZone,
-    private messageAry: MessageStorageService
+    private messageAry: MessageStorageService,
+    private cookie: CookieService
   ) {
     this.subscribeToEvents();
   }
@@ -29,7 +32,8 @@ export class ChatWindowComponent implements OnInit{
   ngOnInit(){
     this.messages = this.messageAry.get();
     console.log(this.messages);
-    console.log("init");
+    this.userId = this.cookie.get("userId");
+
   }
 
 
@@ -37,8 +41,14 @@ export class ChatWindowComponent implements OnInit{
     this.chatService.messageReceived.subscribe((message: Message) => {  
       console.log(message);
       this._ngZone.run(() => {  
-          message.type = "received";  
+          if(this.userId == message.value.userId){
+            message.type = 'sent';
+          }else{
+            message.type = 'recieved';
+          }
           message.date = Date();
+          message.message = message.value.message;
+          message.nickName = message.value.nickName;
           this.messages = this.messageAry.write(message);
           console.log(this.messages);
 
