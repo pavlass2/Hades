@@ -24,13 +24,16 @@ namespace Hades.Data
         /// </summary>
         /// <param name="group">Group to add.</param>
         /// <param name="groupFounder">Groups founder (who is already added in Group as founder).</param>
-        /// <returns>void</returns>
-        public async Task CreateGroupAsync(Group group, ApplicationUser groupFounder)
+        /// <returns>ApplicationUser which was created as a founder</returns>
+        public async Task<ApplicationUser> CreateGroupAsync(Group group, ApplicationUser groupFounder)
         {
-            await AddAplicationUserAsync(groupFounder);
+            ApplicationUser applicationUser = await AddAplicationUserAsync(groupFounder);
             await applicationDbContext.AddAsync(group);
 
             await applicationDbContext.SaveChangesAsync();
+
+            return applicationUser;
+
         }
 
         /// <summary>
@@ -65,8 +68,8 @@ namespace Hades.Data
         /// Creates new user with a userName "generated" from his nickname.
         /// </summary>
         /// <param name="applicationUser">Application user to add.</param>
-        /// <returns>void</returns>
-        public async Task AddAplicationUserAsync(ApplicationUser applicationUser)
+        /// <returns>ApplicationUser which was created</returns>
+        public async Task<ApplicationUser> AddAplicationUserAsync(ApplicationUser applicationUser)
         {
             // Use NickName as UserName.
             string consideredUserName = applicationUser.NickName;
@@ -82,6 +85,8 @@ namespace Hades.Data
             }
             applicationUser.UserName = consideredUserName;
             await userManager.CreateAsync(applicationUser);
+
+            return await userManager.FindByNameAsync(applicationUser.UserName);
         }
 
         /// <summary>
@@ -99,22 +104,28 @@ namespace Hades.Data
         /// </summary>
         /// <param name="student">Student to add.</param>
         /// <param name="groupName">Group name to add the student to.</param>
-        /// <returns>void</returns>
-        public async Task AddStudentToAGroupAsync(ApplicationUser student, string groupName)
+        /// <returns>ApplicationUser which was created as a student</returns>
+        public async Task<ApplicationUser> AddStudentToAGroupAsync(ApplicationUser student, string groupName)
         {
             Group group = GetGroup(groupName);
-            await AddAplicationUserAsync(student);
-            student = await GetApplicationUserAsync(student.UserName);
+            ApplicationUser addedStudent = await AddAplicationUserAsync(student);
             
             StudentGroup studentGroup = new StudentGroup
             {
                 Group = group,
                 GroupId = group.GroupId,
-                Student = student,
-                StudentId = student.Id
+                Student = addedStudent,
+                StudentId = addedStudent.Id
             };
 
             applicationDbContext.StudentGroup.Add(studentGroup);           
+            await applicationDbContext.SaveChangesAsync();
+            return addedStudent;
+        }
+
+        public async Task AddMessageAsync(Message message)
+        {
+            applicationDbContext.Messages.Add(message);
             await applicationDbContext.SaveChangesAsync();
         }
 

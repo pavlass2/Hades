@@ -21,6 +21,8 @@ namespace Hades.Data
         public DbSet<ApplicationUser> Users { get; set; }
         public DbSet<Group> Groups { get; set; }
 
+        public DbSet<Message> Messages { get; set; }
+
         //Join table
         public DbSet<StudentGroup> StudentGroup { get; set; }
 

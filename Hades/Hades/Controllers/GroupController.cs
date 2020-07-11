@@ -61,10 +61,10 @@ namespace Hades.Controllers
                 Group group = new Group(groupName, applicationUser, (string)result["groupDescription"]);
 
                 // Create group (it also creates user)
-                await dbDataProvider.CreateGroupAsync(group, applicationUser);
+                ApplicationUser founder = await dbDataProvider.CreateGroupAsync(group, applicationUser);
 
                 logger.LogInformation("Creating group: " + groupName);
-                return new JsonResult(new { Result = true });
+                return new JsonResult(new { Result = true, UserId = founder.Id });
             }
             else
             {
@@ -123,9 +123,9 @@ namespace Hades.Controllers
                 applicationUser.NickName = (string)result["userName"];
 
                 // Add the new user to the group
-                await dbDataProvider.AddStudentToAGroupAsync(applicationUser, groupName);
+                ApplicationUser student = await dbDataProvider.AddStudentToAGroupAsync(applicationUser, groupName);
                 logger.LogInformation("Group existence check: " + groupName);
-                return new JsonResult(new { Result = true });
+                return new JsonResult(new { Result = true, UserId = student.Id });
             }
             else
             {
@@ -133,6 +133,8 @@ namespace Hades.Controllers
                 return new JsonResult("Error occurred during new user creation.");
             }
         }
+
+
 
         /*TODO
          * Co kdyz si uzivatel zvoli stejne uzivatelske jmeno, jako nekdo v groupe uz ma?
