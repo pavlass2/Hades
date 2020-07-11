@@ -10,6 +10,7 @@ import { UserListComponent } from './components/user-list/user-list.component';
 import { MessageInputComponent } from './components/message-input/message-input.component';
 import { FormsModule } from '@angular/forms';
 import { ChatWindowComponent } from './components/chat-window/chat-window.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 
 @NgModule({
@@ -21,7 +22,9 @@ import { ChatWindowComponent } from './components/chat-window/chat-window.compon
   imports: [
     CommonModule,
     GroupRoomRoutingModule,
-    FormsModule
+    FormsModule,
+    FontAwesomeModule
   ]
 })
-export class GroupRoomModule { }
+export class GroupRoomModule { 
+}

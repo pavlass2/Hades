@@ -1,0 +1,136 @@
+.listTop{
+    margin-top: 10px;
+}
+.block,
+.card {
+    background: #fff;
+    border-width: 0;
+    border-radius: .25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+    margin-bottom: 1rem
+}
+
+.avatar {
+    position: relative;
+    line-height: 1;
+    border-radius: 500px;
+    white-space: nowrap;
+    font-weight: 700;
+    border-radius: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    border-radius: 500px;
+    box-shadow: 0 5px 10px 0 rgba(50, 50, 50, .15)
+}
+
+.avatar img {
+    border-radius: inherit;
+    width: 100%
+}
+
+.gd-1 {
+    color: #fff;
+    border: none;
+    background: #448bff linear-gradient(45deg, #448bff, #44e9ff)
+}
+
+.gd-2 {
+    color: #fff;
+    border: none;
+    background: #31c971 linear-gradient(45deg, #31c971, #3dc931)
+}
+
+.gd-3 {
+    color: #fff;
+    border: none;
+    background: #14bae4 linear-gradient(45deg, #14bae4, #14e4a6)
+}
+
+.gd-4 {
+    color: #fff;
+    border: none;
+    background: #f4c414 linear-gradient(45deg, #f4c414, #f45414)
+}
+
+.gd-5 {
+    color: #fff;
+    border: none;
+    background: #f4c414 linear-gradient(45deg, #373B44, #4286f4)
+}
+
+.gd-6 {
+    color: #fff;
+    border: none;
+    background: #f4c414 linear-gradient(45deg, #00B4DB, #0083B0)
+}
+
+.gd-7 {
+    color: #fff;
+    border: none;
+    background: #f4c414 linear-gradient(45deg, #f4c414, #d819a8)
+}
+
+.gd-8 {
+    color: #fff;
+    border: none;
+    background: #f4c414 linear-gradient(45deg, #dd1731, #e9e6e5)
+}
+
+.gd-9 {
+    color: #fff;
+    border: none;
+    background: #f4c414 linear-gradient(45deg, #f5f5f5, #9c857b)
+}
+
+.gd-10 {
+    color: #fff;
+    border: none;
+    background: #f4c414 linear-gradient(45deg, #d5e407, #2f48d8)
+}
+
+
+
+.list {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.list-item {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word
+}
+
+.list-row .list-item {
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: .75rem .625rem
+}
+
+.list-row .list-item>* {
+    padding-left: .625rem;
+    padding-right: .625rem
+}
+
+
+.w-48 {
+    width: 48px !important;
+    height: 48px !important
+}
+
+.w-40 {
+    width: 40px !important;
+    height: 40px !important
+}

@@ -10,9 +10,9 @@
     padding: 10px;
     position: fixed;
     width: 12vw;
-    height: 100%;
+    height: calc(100vh - 50px);
     overflow: scroll;
-    background-color: yellow;
+    background-color: #DCDCDC;
 }
 
 
@@ -48,7 +48,7 @@
   .chatWindow{
     padding: 10px;
     left: 12vw;
-    height:  calc(88vh - 30px);
+    height:  calc(85vh - 30px);
     width: 88vw;
     background-color: blueviolet;
     position: fixed;

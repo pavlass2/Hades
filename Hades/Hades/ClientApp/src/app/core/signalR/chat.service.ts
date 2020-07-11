@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';  
 import { Message } from '../models/chatModel'; 
 import { apiUrl } from '../models/url';
+import * as signalR from '@aspnet/signalr';
 
 @Injectable({
   providedIn: 'root'
@@ -24,10 +25,14 @@ export class ChatService {
     this._hubConnection.invoke('SendMessage', message);  
   }  
   
-  private createConnection() {  
+  private createConnection() {   
     this._hubConnection = new HubConnectionBuilder()  
-      .withUrl(apiUrl + '/ChatHub')  
-      .build();  
+      .withUrl(apiUrl + '/ChatHub', {
+      skipNegotiation: true,
+      transport: signalR.HttpTransportType.WebSockets
+    }).build();
+    console.log("Created!");  
+
   }  
   
   private startConnection(): void {  
@@ -40,7 +45,6 @@ export class ChatService {
       })  
       .catch(err => {  
         console.log('Error while establishing connection, retrying...');  
-        setTimeout(function () { this.startConnection(); }, 5000);  
       });  
   }  
   
@@ -48,5 +52,6 @@ export class ChatService {
     this._hubConnection.on('RecieveMessage', (data: any) => {  
       this.messageReceived.emit(data);  
     });  
+    console.log("Registered!");
   }  
 }

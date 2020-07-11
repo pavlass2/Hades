@@ -1,8 +1,11 @@
-<div>
-    <form #f="ngForm" class="form-group" (ngSubmit)="onSubmit(f)" autocomplete="off">
-        <p >
-            <input type="text" name="inpitMessage" class="form-control"  class="message" [(ngModel)]="inputMessage" required>
+
+
+<div class="type_msg">
+    <div class="input_msg_write">
+        <form #f="ngForm" class="form-group" (ngSubmit)="onSubmit(f)" autocomplete="off">
+            <input type="text" name="inputMessage" class="write_msg" [(ngModel)]="inputMessage" required placeholder="Type a message" />
+            <button class="msg_send_btn" type="button" (click)="onSubmit(f)" ><i class="material-icons"><fa-icon [icon]="faPaperPlane"></fa-icon></i></button>
             <input type="submit" style="visibility: hidden;">
-        </p>
-    </form>
+        </form>
+    </div>
 </div>
