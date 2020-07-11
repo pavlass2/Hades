@@ -50,7 +50,7 @@ namespace Hades.Controllers
                     if (group != null)
                     {
                         string message = (string)result["message"];
-                        await Clients.All.SendAsync("ReceiveMessage", new JsonResult(new { Message = message, NickName = author.NickName }));
+                        await Clients.All.SendAsync("ReceiveMessage", new JsonResult( new { Message = message, NickName = author.NickName, UserId = author.Id }));
 
                         await dbDataProvider.AddMessageAsync(new Message(author, group, message));
                         logger.LogInformation("\"SendMessage\" processing for group " + group.Name + " successful.");
