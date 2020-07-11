@@ -14,6 +14,7 @@ export class UserListComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+    
     for (let index = 0; index < this.userListName.length; index++) {
       this.randomVals[index] = this.getRandomClass();
     }
