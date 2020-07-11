@@ -49,7 +49,7 @@ export class ChatService {
   }  
   
   private registerOnServerEvents(): void {  
-    this._hubConnection.on('RecieveMessage', (data: any) => {  
+    this._hubConnection.on('ReceiveMessage', (data: any) => {  
       this.messageReceived.emit(data);  
     });  
     console.log("Registered!");

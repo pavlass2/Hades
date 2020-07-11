@@ -1,5 +1,5 @@
-<div >
-  <div id="mesgsContainer" class="mesgs" >
+<div>
+  <div id="mesgsContainer" class="mesgs">
     <div class="msg_history" *ngFor="let msg of messages">
       <div class="incoming_msg" *ngIf="msg.type == 'recieved'">
         <div class="received_msg">
@@ -16,4 +16,5 @@
       </div>
     </div>
 </div>
+{{ messages.length }}
 </div>

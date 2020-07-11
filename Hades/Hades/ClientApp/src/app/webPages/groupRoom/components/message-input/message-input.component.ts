@@ -36,14 +36,11 @@ export class MessageInputComponent implements OnInit {
   }
 
   onSubmit(f){
-    console.log(this.inputMessage);
-    
     this.sendMessageUser(this.inputMessage, this.userId, this.groupName);
     f.resetForm();
   }
 
   sendMessageUser(messageInput, userId, groupName): void {  
-    console.log(messageInput);
     if (messageInput != null) {  
       this.message = new Message();  
       this.message.message = messageInput; 
@@ -51,7 +48,7 @@ export class MessageInputComponent implements OnInit {
       this.message.groupName = groupName; 
       this.message.date = Date();
       this.message.type = "sent";
-      this.messages = this.messageAry.write(this.message); 
+      //this.messages = this.messageAry.write(this.message); 
       this.chatService.sendMessage(this.message);   
     }else{
       console.log("Chyba!")
