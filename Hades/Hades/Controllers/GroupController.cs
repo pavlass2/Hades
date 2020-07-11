@@ -28,6 +28,12 @@ namespace Hades.Controllers
             this.controllerUtils = controllerUtils;
         }
 
+        //public async Task<IActionResult> GetGroupMembers(JsonElement requestData)
+        //{
+        //    Dictionary<string, Type> input = new Dictionary<string, Type> { { "groupName", groupName.GetType() } };
+        //    Dictionary<string, object> result = controllerUtils.UnwrapJsonRequest(input, requestData);
+        //}
+
         /// <summary>
         /// Creates group
         /// </summary>
