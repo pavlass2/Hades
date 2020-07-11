@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using Hades.Utils;
+using Hades.Controllers;
 
 namespace Hades
 {
@@ -85,6 +86,7 @@ namespace Hades
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHub<ChatHub>("chatHub");
             });
 
             app.UseSpa(spa =>
