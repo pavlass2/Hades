@@ -3,6 +3,7 @@ import { Message } from '../../../../core/models/chatModel';
 import { ChatService } from '../../../../core/signalR/chat.service';  
 import { CookieService } from 'ngx-cookie-service';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
+import { MessageStorageService } from '../../../../core/services/messageArray/message-storage.service'
 
 
 @Component({
@@ -25,7 +26,8 @@ export class MessageInputComponent implements OnInit {
 
   constructor(
     private chatService: ChatService,
-    private cookie: CookieService
+    private cookie: CookieService,
+    private messageAry: MessageStorageService
   ) { }
 
   ngOnInit(): void {
@@ -47,7 +49,9 @@ export class MessageInputComponent implements OnInit {
       this.message.message = messageInput; 
       this.message.userId = userId;
       this.message.groupName = groupName; 
-      this.messages.push(this.message);  
+      this.message.date = Date();
+      this.message.type = "sent";
+      this.messages = this.messageAry.write(this.message); 
       this.chatService.sendMessage(this.message);   
     }else{
       console.log("Chyba!")

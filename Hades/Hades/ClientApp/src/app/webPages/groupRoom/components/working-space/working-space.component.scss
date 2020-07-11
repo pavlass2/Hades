@@ -13,6 +13,7 @@
     height: calc(100vh - 50px);
     overflow: scroll;
     background-color: #DCDCDC;
+    min-width: 150px;
 }
 
 
@@ -39,7 +40,7 @@
 
   .messageBox{
     position: fixed;
-    height: 3vw;
+    height: 5vh;
     width: 88vw;
     bottom: 30px;
     margin-left: 12vw;
@@ -48,8 +49,9 @@
   .chatWindow{
     padding: 10px;
     left: 12vw;
-    height:  calc(85vh - 30px);
+    height:  80vh;
     width: 88vw;
-    background-color: blueviolet;
+    background-color: white;
     position: fixed;
+    overflow-y: scroll;
   }

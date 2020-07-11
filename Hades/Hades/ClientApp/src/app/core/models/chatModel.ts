@@ -4,4 +4,6 @@ export class Message
     userId: string;
     nickName: string;
     groupName: string;
+    type: string;
+    date: string;
    }  
