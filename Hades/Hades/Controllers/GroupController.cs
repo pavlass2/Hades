@@ -74,7 +74,7 @@ namespace Hades.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetGroupMessages(JsonElement requestData)
+        public IActionResult GetGroupMessages(JsonElement requestData)
         {
             // Unwrap data.
             Dictionary<string, Type> input = new Dictionary<string, Type> { { "groupName", typeof(string) } };
@@ -93,13 +93,13 @@ namespace Hades.Controllers
                     foreach (Message message in messages)
                     {
                         GetGroupMessagesModel model = new GetGroupMessagesModel();
-                        model.message = message.TextContent;
-                        model.userId = message.Author.Id;
-                        model.nickName = message.Author.NickName;
-                        model.date = message.FrontEndTimeStamp;
+                        model.Message = message.TextContent;
+                        model.UserId = message.Author.Id;
+                        model.NickName = message.Author.NickName;
+                        model.Date = message.FrontEndTimeStamp;
                         models.Add(model);
                     }
-                    return new JsonResult(JsonSerializer.Serialize(models));
+                    return new JsonResult(models);
                 }
                 else
                 {
@@ -112,13 +112,6 @@ namespace Hades.Controllers
                 logger.LogInformation("Could NOT get messages - invalid request data.");
                 return new JsonResult(new { Result = false, Message = "Could NOT get messages - invalid request data." });
             }
-        }
-        private class GetGroupMessagesModel
-        {
-            public string message;
-            public string userId;
-            public string nickName;
-            public string date;
         }
 
 
@@ -233,5 +226,13 @@ namespace Hades.Controllers
         /*TODO
          * Co kdyz si uzivatel zvoli stejne uzivatelske jmeno, jako nekdo v groupe uz ma?
          */
+    }
+
+    public class GetGroupMessagesModel
+    {
+        public string Message { get; set; }
+        public string UserId { get; set; }
+        public string NickName { get; set; }
+        public string Date { get; set; }
     }
 }
