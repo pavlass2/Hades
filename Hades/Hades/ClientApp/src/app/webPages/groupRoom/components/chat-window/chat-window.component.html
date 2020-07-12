@@ -12,7 +12,7 @@
       <div class="outgoing_msg" *ngIf="msg.type == 'sent'">
         <div class="sent_msg">
             <p>{{ msg.message }}</p>
-          <span class="time_date"> {{ msg.date | date:'medium' }} </span> </div>
+          <span class="time_date"> {{ msg.date | date:'MMMM d,  H:mm' }} </span> </div>
       </div>
     </div>
 </div>
