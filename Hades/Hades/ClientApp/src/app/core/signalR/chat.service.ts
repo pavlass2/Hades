@@ -31,7 +31,6 @@ export class ChatService {
       skipNegotiation: true,
       transport: signalR.HttpTransportType.WebSockets
     }).build();
-    console.log("Created!");  
 
   }  
   
@@ -52,6 +51,5 @@ export class ChatService {
     this._hubConnection.on('ReceiveMessage', (data: any) => {  
       this.messageReceived.emit(data);  
     });  
-    console.log("Registered!");
   }  
 }

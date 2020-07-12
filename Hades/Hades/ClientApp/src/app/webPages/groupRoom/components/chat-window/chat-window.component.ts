@@ -33,7 +33,6 @@ export class ChatWindowComponent implements OnInit{
 
   ngOnInit(){
     this.messages = this.messageAry.get();
-    console.log(this.messages);
     this.userId = this.cookie.get("userId");
     this.loadHistory();
 
@@ -54,7 +53,6 @@ export class ChatWindowComponent implements OnInit{
           message.nickName = message.value.nickName;
           this.messages = this.messageAry.write(message);
           console.log(this.messages);
-
       });  
     }, error => {
       console.log(error);
@@ -64,9 +62,21 @@ export class ChatWindowComponent implements OnInit{
 
   loadHistory(){
     this.backendcall.getMessagesHistory(this.cookie.get("groupNameCookie")).subscribe( resMsg => {
-      console.log("MsgHistory")
-      console.log(resMsg)
-      console.log(JSON.parse(resMsg));
+      console.log(resMsg);
+      resMsg.forEach(element => {
+        var messageIter = new Message(); 
+        console.log(element)
+        messageIter.date = element.date;
+        messageIter.message = element.message;
+        messageIter.nickName = element.nickName;
+        if(this.userId == element.userId){
+          messageIter.type = 'sent';
+        }else{
+          messageIter.type = 'recieved';
+        }
+        this.messages = this.messageAry.write(messageIter);
+      });
+
     })
   }
 
