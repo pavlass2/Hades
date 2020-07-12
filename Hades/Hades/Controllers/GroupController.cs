@@ -115,10 +115,10 @@ namespace Hades.Controllers
         }
         private class GetGroupMessagesModel
         {
-            internal string message;
-            internal string userId;
-            internal string nickName;
-            internal string date;
+            public string message;
+            public string userId;
+            public string nickName;
+            public string date;
         }
 
 
