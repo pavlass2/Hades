@@ -9,9 +9,11 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class UserListComponent implements OnInit {
 
-  userListName = ["Petr", "Pavel", "Jiří", "Max", "Pavel", "Jiří", "Max", "Pavel", "Jiří", "Max", "Pavel", "Jiří", "Max", "Pavel", "Jiří", "Max", "Pavel", "Jiří", "Max", "Pavel", "Jiří", "Max", "Pavel", "Jiří", "Max"];
-  randomVals = Array.apply(null, Array(this.userListName.length)).map(String.prototype.valueOf, "");
-  show = false
+  userListName: any;
+  randomVals: any;
+  show = false;
+  color: boolean = true;
+  numberOfUsers: number;
 
   constructor(
     private backendcall: BackendcallService,
@@ -19,14 +21,14 @@ export class UserListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.getData(this.color);
+    setInterval(data => {
+      this.getData(this.color);
+      console.log(this.randomVals);
+    }, 1000);
     
-    this.backendcall.getListOfUsers(this.cookie.get("groupNameCookie")).subscribe( users => {
-      console.log(users);
-    })
-    
-    for (let index = 0; index < this.userListName.length; index++) {
-      this.randomVals[index] = this.getRandomClass();
-    }
+
   }
 
   randomIntFromInterval(min, max) { // min and max included 
@@ -35,6 +37,27 @@ export class UserListComponent implements OnInit {
 
   getRandomClass(){
     return ( "gd-" + this.randomIntFromInterval(1,10));
+  }
+
+  getData(color){
+    this.backendcall.getListOfUsers(this.cookie.get("groupNameCookie")).subscribe( users => {
+      this.userListName = JSON.parse(users);
+      
+
+      if(!color && this.numberOfUsers < this.userListName.length){
+        this.color = true;
+      }
+    
+      if(color){
+        this.numberOfUsers = this.userListName.length;
+        this.randomVals = Array.apply(null, Array(this.userListName.length)).map(String.prototype.valueOf, "");
+        for (let index = 0; index < this.userListName.length; index++) {
+          this.randomVals[index] = this.getRandomClass();
+        }
+        this.color = false;
+      }
+      
+    })
   }
 
 }

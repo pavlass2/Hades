@@ -27,7 +27,7 @@ export class BackendcallService {
   }
 
   getListOfUsers(groupName: string){
-    return this.httpClient.post(apiUrl + '/api/Group/GetGroupMembers', {groupName})
+    return this.httpClient.post<any>(apiUrl + '/api/Group/GetGroupMembers', {groupName})
   }
 
 }
