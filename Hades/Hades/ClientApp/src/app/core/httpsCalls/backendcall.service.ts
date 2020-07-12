@@ -30,4 +30,8 @@ export class BackendcallService {
     return this.httpClient.post<any>(apiUrl + '/api/Group/GetGroupMembers', {groupName})
   }
 
+  getMessagesHistory(groupName: string){
+    return this.httpClient.post<any>(apiUrl + '/api/Group/GetGroupMessages', {groupName})
+  }
+
 }

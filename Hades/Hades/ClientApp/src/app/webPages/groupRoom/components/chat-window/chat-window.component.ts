@@ -4,6 +4,7 @@ import { ChatService } from '../../../../core/signalR/chat.service';
 import { MessageStorageService } from 'src/app/core/services/messageArray/message-storage.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { BackendcallService } from 'src/app/core/httpsCalls/backendcall.service';
 
 @Component({
   selector: 'chat-window',
@@ -24,7 +25,8 @@ export class ChatWindowComponent implements OnInit{
     private chatService: ChatService,  
     private _ngZone: NgZone,
     private messageAry: MessageStorageService,
-    private cookie: CookieService
+    private cookie: CookieService,
+    private backendcall: BackendcallService
   ) {
     this.subscribeToEvents();
   }
@@ -33,6 +35,7 @@ export class ChatWindowComponent implements OnInit{
     this.messages = this.messageAry.get();
     console.log(this.messages);
     this.userId = this.cookie.get("userId");
+    this.loadHistory();
 
   }
 
@@ -58,6 +61,14 @@ export class ChatWindowComponent implements OnInit{
     });  
   }  
 
+
+  loadHistory(){
+    this.backendcall.getMessagesHistory(this.cookie.get("groupNameCookie")).subscribe( resMsg => {
+      console.log("MsgHistory")
+      console.log(resMsg)
+      console.log(JSON.parse(resMsg));
+    })
+  }
 
 
   ngOnDestroy(){

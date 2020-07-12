@@ -25,7 +25,6 @@ export class UserListComponent implements OnInit {
     this.getData(this.color);
     setInterval(data => {
       this.getData(this.color);
-      console.log(this.randomVals);
     }, 1000);
     
 
