@@ -31,29 +31,77 @@ namespace Hades.Controllers
             this.controllerUtils = controllerUtils;
         }
 
+        /// <summary>
+        /// Gets all members of a group.
+        /// </summary>
+        /// <param name="requestData">groupName of a group to return the members of.</param>
+        /// <returns>JSON containing list of all members nickNames.</returns>
         [HttpPost]
         public async Task<IActionResult> GetGroupMembers(JsonElement requestData)
         {
+            // Unwrap data.
             Dictionary<string, Type> input = new Dictionary<string, Type> { { "groupName", typeof(string) } };
             Dictionary<string, object> result = controllerUtils.UnwrapJsonRequest(input, requestData);
+            if (result != null)
+            {
+                // Get group from DB.
+                string groupName = (string)result["groupName"];
+                Group group = dbDataProvider.GetGroup(groupName);
 
-            Group group = dbDataProvider.GetGroup((string)result["groupName"]);
-            List<ApplicationUser> students = await dbDataProvider.GetGroupStudents(group).ToListAsync();
-            students.Insert(0, group.Founder);
-            IEnumerable<string> usersNicks = students.Select(s => s.NickName);
-
-            return new JsonResult(JsonSerializer.Serialize(usersNicks));
+                if (group != null)
+                {
+                    // Get group members from DB 
+                    List<ApplicationUser> groupMembers = await dbDataProvider.GetGroupStudents(group).ToListAsync();
+                    // Stick founder to 0 index, frontend counts on it.
+                    groupMembers.Insert(0, group.Founder);
+                    // Return just their nickNames.
+                    IEnumerable<string> usersNicks = groupMembers.Select(s => s.NickName);
+                    logger.LogInformation("Retrieving message for group: " + groupName);// 
+                    return new JsonResult(JsonSerializer.Serialize(usersNicks));
+                }
+                else
+                {
+                    logger.LogInformation("Could NOT get group members - group not found: " + groupName);
+                    return new JsonResult(new { Result = false, Message = "Could NOT get group members - group not found: " + groupName });
+                }
+                
+            }
+            else
+            {
+                logger.LogInformation("Could NOT get messages - invalid request data.");
+                return new JsonResult(new { Result = false, Message = "Could NOT get messages - invalid request data." });
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> GetGroupMessages(JsonElement requestData)
         {
+            // Unwrap data.
             Dictionary<string, Type> input = new Dictionary<string, Type> { { "groupName", typeof(string) } };
             Dictionary<string, object> result = controllerUtils.UnwrapJsonRequest(input, requestData);
-            string groupName = (string)result["groupName"];
 
-            List<Message> messages = await dbDataProvider.GetGroupMessages(dbDataProvider.GetGroup(groupName)).ToListAsync();
-            return new JsonResult(JsonSerializer.Serialize(messages));
+            if (result != null)
+            {
+                // Get group and its messages from DB.
+                string groupName = (string)result["groupName"];
+                List<Message> messages = await dbDataProvider.GetGroupMessages(dbDataProvider.GetGroup(groupName)).ToListAsync();
+
+                if (messages != null)
+                {
+                    logger.LogInformation("Retrieving message for group: " + groupName);
+                    return new JsonResult(JsonSerializer.Serialize(messages));
+                }
+                else
+                {
+                    logger.LogInformation("Could NOT get messages - group not found: " + groupName);
+                    return new JsonResult(new { Result = false, Message = "Could NOT get messages - group not found: " + groupName });
+                }
+            }
+            else
+            {
+                logger.LogInformation("Could NOT get messages - invalid request data.");
+                return new JsonResult(new { Result = false, Message = "Could NOT get messages - invalid request data." });
+            }
         }
 
         /// <summary>

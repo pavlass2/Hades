@@ -43,7 +43,7 @@ namespace Hades.Data
         /// <returns>Founded group.</returns>
         public Group GetGroup(string groupName)
         {
-            return applicationDbContext.Groups.FirstOrDefault(g => g.Name.Equals(groupName));
+            return applicationDbContext.Groups.Include("Founder").FirstOrDefault(g => g.Name.Equals(groupName));
         }
 
         /// <summary>
