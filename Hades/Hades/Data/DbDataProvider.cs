@@ -75,7 +75,7 @@ namespace Hades.Data
             string consideredUserName = applicationUser.NickName;
             int counter = 0;
             // If this username is already taken, add number.
-            while (await GetApplicationUserAsync(consideredUserName) != null)
+            while (await userManager.FindByEmailAsync(consideredUserName) != null)
             {
                 // Try it again but with a number.
                 consideredUserName = applicationUser.NickName + counter.ToString();
@@ -87,16 +87,6 @@ namespace Hades.Data
             await userManager.CreateAsync(applicationUser);
 
             return await userManager.FindByNameAsync(applicationUser.UserName);
-        }
-
-        /// <summary>
-        /// Gets ApplicationUser.
-        /// </summary>
-        /// <param name="userName">Username of the ApplicationUser to find.</param>
-        /// <returns>Founded application user.</returns>
-        public async Task<ApplicationUser> GetApplicationUserAsync(string userName)
-        {
-            return await userManager.FindByNameAsync(userName);
         }
 
         /// <summary>
@@ -129,6 +119,20 @@ namespace Hades.Data
             await applicationDbContext.SaveChangesAsync();
         }
 
+        public IQueryable<ApplicationUser> GetGroupStudents(Group group)
+        {
+            IQueryable<StudentGroup> studentGroup = applicationDbContext.StudentGroup.Where(
+                sg => sg.GroupId == group.GroupId);
+            IQueryable<ApplicationUser> students = applicationDbContext.Users.Where(
+                u => studentGroup.Select(
+                    sg => sg.StudentId).Contains(u.Id));
+
+            return students;
+        }
         
+        public IQueryable<Message> GetGroupMessages(Group group)
+        {
+            return applicationDbContext.Messages.Where(m => m.PostedInGroup.GroupId == group.GroupId);
+        }
     }
 }

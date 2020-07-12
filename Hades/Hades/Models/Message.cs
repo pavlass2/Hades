@@ -16,15 +16,24 @@ namespace Hades.Models
         public ApplicationUser Author { get; set; }
         public Group PostedInGroup { get; set; }
         public string TextContent { get; set; }
+        public DateTime TimeStamp { get; set; }
+        public string FrontEndTimeStamp { get; set; }
 
         public Message()
         {}
 
-        public Message(ApplicationUser author, Group postedInGroup, string textContent)
+        public Message(
+            ApplicationUser author,
+            Group postedInGroup,
+            string textContent,
+            DateTime timeStamp,
+            string frontEndTimeStamp)
         {
             Author = author;
             PostedInGroup = postedInGroup;
             TextContent = textContent;
+            TimeStamp = timeStamp;
+            FrontEndTimeStamp = frontEndTimeStamp;
         }
     }
 }

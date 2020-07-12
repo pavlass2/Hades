@@ -35,7 +35,8 @@ namespace Hades.Controllers
             Dictionary<string, Type> input = new Dictionary<string, Type> {
                 { "message", typeof(string) },
                 { "userId", typeof(string) },
-                { "groupName", typeof(string) }
+                { "groupName", typeof(string) },
+                { "date", typeof(string) }
             };
             Dictionary<string, object> result = controllerUtils.UnwrapJsonRequest(input, requestData);
             logger.LogInformation(result.ToString());
@@ -49,10 +50,10 @@ namespace Hades.Controllers
                     Group group = dbDataProvider.GetGroup((string)result["groupName"]);
                     if (group != null)
                     {
-                        string message = (string)result["message"];
-                        await Clients.All.SendAsync("ReceiveMessage", new JsonResult( new { Message = message, NickName = author.NickName, UserId = author.Id }));
+                        string textContent = (string)result["message"];
+                        await Clients.All.SendAsync("ReceiveMessage", textContent, author.NickName, author.Id);
 
-                        await dbDataProvider.AddMessageAsync(new Message(author, group, message));
+                        await dbDataProvider.AddMessageAsync(new Message(author, group, textContent, DateTime.Now, (string)result["date"]));
                         logger.LogInformation("\"SendMessage\" processing for group " + group.Name + " successful.");
                     }
                     else

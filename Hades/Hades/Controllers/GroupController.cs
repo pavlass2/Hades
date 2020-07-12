@@ -2,9 +2,12 @@
 using Hades.Models;
 using Hades.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -28,11 +31,30 @@ namespace Hades.Controllers
             this.controllerUtils = controllerUtils;
         }
 
-        //public async Task<IActionResult> GetGroupMembers(JsonElement requestData)
-        //{
-        //    Dictionary<string, Type> input = new Dictionary<string, Type> { { "groupName", groupName.GetType() } };
-        //    Dictionary<string, object> result = controllerUtils.UnwrapJsonRequest(input, requestData);
-        //}
+        [HttpGet]
+        public async Task<IActionResult> GetGroupMembers(JsonElement requestData)
+        {
+            Dictionary<string, Type> input = new Dictionary<string, Type> { { "groupName", typeof(string) } };
+            Dictionary<string, object> result = controllerUtils.UnwrapJsonRequest(input, requestData);
+
+            Group group = dbDataProvider.GetGroup((string)result["groupName"]);
+            List<ApplicationUser> students = await dbDataProvider.GetGroupStudents(group).ToListAsync();
+            students.Insert(0, group.Founder);
+            IEnumerable<string> usersNicks = students.Select(s => s.NickName);
+
+            return new JsonResult(JsonSerializer.Serialize(usersNicks));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetGroupMessages(JsonElement requestData)
+        {
+            Dictionary<string, Type> input = new Dictionary<string, Type> { { "groupName", typeof(string) } };
+            Dictionary<string, object> result = controllerUtils.UnwrapJsonRequest(input, requestData);
+            string groupName = (string)result["groupName"];
+
+            List<Message> messages = await dbDataProvider.GetGroupMessages(dbDataProvider.GetGroup(groupName)).ToListAsync();
+            return new JsonResult(JsonSerializer.Serialize(messages));
+        }
 
         /// <summary>
         /// Creates group
