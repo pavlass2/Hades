@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { BackendcallService } from 'src/app/core/httpsCalls/backendcall.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'user-list',
@@ -11,9 +13,16 @@ export class UserListComponent implements OnInit {
   randomVals = Array.apply(null, Array(this.userListName.length)).map(String.prototype.valueOf, "");
   show = false
 
-  constructor() {}
+  constructor(
+    private backendcall: BackendcallService,
+    private cookie: CookieService
+  ) {}
 
   ngOnInit(): void {
+    
+    this.backendcall.getListOfUsers(this.cookie.get("groupNameCookie")).subscribe( users => {
+      console.log(users);
+    })
     
     for (let index = 0; index < this.userListName.length; index++) {
       this.randomVals[index] = this.getRandomClass();

@@ -37,6 +37,7 @@ export class CreateGroupComponent implements OnInit {
 
   ngOnInit(): void {
     this.title.setTitle(this.newGroupTitle);
+    this.cookie.deleteAll();
   }
 
 
@@ -48,7 +49,6 @@ export class CreateGroupComponent implements OnInit {
         this.toastr.showSuccess("Skupina vytvořena!", "Nyní můžete využívat všechny možnosti!");
         this.cookie.set("userNameCookie", this.inputField.userName);
         this.cookie.set("groupNameCookie", this.inputField.groupName);
-        this.cookie.delete("userId");
         this.cookie.set("userId", res.userId);
         this.router.navigate(['mainRoom']);
       }else{

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { apiUrl } from '../models/url';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { UserModel } from '../models/userModel';
 
 @Injectable({
@@ -26,6 +26,8 @@ export class BackendcallService {
     return this.httpClient.post<UserModel>(apiUrl + '/api/Group/AddStudentToGroup', {userName, groupName})
   }
 
-
+  getListOfUsers(groupName: string){
+    return this.httpClient.post(apiUrl + '/api/Group/GetGroupMembers', {groupName})
+  }
 
 }
