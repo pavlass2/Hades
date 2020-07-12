@@ -13,7 +13,7 @@ export class UserListComponent implements OnInit {
   randomVals: any;
   show = false;
   color: boolean = true;
-  numberOfUsers: number;
+  numberOfUsers: number = -1;
 
   constructor(
     private backendcall: BackendcallService,
@@ -23,9 +23,9 @@ export class UserListComponent implements OnInit {
   ngOnInit(): void {
 
     this.getData(this.color);
-    setInterval(data => {
-      this.getData(this.color);
-    }, 1000);
+    //setInterval(data => {
+    //  this.getData(this.color);
+    //}, 1000);
     
 
   }
