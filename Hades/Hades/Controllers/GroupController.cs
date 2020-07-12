@@ -56,7 +56,7 @@ namespace Hades.Controllers
                     groupMembers.Insert(0, group.Founder);
                     // Return just their nickNames.
                     IEnumerable<string> usersNicks = groupMembers.Select(s => s.NickName);
-                    logger.LogInformation("Retrieving message for group: " + groupName);// 
+                    logger.LogInformation("Retrieving message for group: " + groupName);
                     return new JsonResult(JsonSerializer.Serialize(usersNicks));
                 }
                 else
@@ -84,12 +84,22 @@ namespace Hades.Controllers
             {
                 // Get group and its messages from DB.
                 string groupName = (string)result["groupName"];
-                List<Message> messages = await dbDataProvider.GetGroupMessages(dbDataProvider.GetGroup(groupName)).ToListAsync();
+                IQueryable<Message> messages = dbDataProvider.GetGroupMessages(dbDataProvider.GetGroup(groupName));
 
                 if (messages != null)
                 {
                     logger.LogInformation("Retrieving message for group: " + groupName);
-                    return new JsonResult(JsonSerializer.Serialize(messages));
+                    List<GetGroupMessagesModel> models = new List<GetGroupMessagesModel>();
+                    foreach (Message message in messages)
+                    {
+                        GetGroupMessagesModel model = new GetGroupMessagesModel();
+                        model.message = message.TextContent;
+                        model.userId = message.Author.Id;
+                        model.nickName = message.Author.NickName;
+                        model.date = message.FrontEndTimeStamp;
+                        models.Add(model);
+                    }
+                    return new JsonResult(JsonSerializer.Serialize(models));
                 }
                 else
                 {
@@ -103,6 +113,14 @@ namespace Hades.Controllers
                 return new JsonResult(new { Result = false, Message = "Could NOT get messages - invalid request data." });
             }
         }
+        private class GetGroupMessagesModel
+        {
+            internal string message;
+            internal string userId;
+            internal string nickName;
+            internal string date;
+        }
+
 
         /// <summary>
         /// Creates group
