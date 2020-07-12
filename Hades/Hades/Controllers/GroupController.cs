@@ -31,7 +31,7 @@ namespace Hades.Controllers
             this.controllerUtils = controllerUtils;
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetGroupMembers(JsonElement requestData)
         {
             Dictionary<string, Type> input = new Dictionary<string, Type> { { "groupName", typeof(string) } };
@@ -45,7 +45,7 @@ namespace Hades.Controllers
             return new JsonResult(JsonSerializer.Serialize(usersNicks));
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetGroupMessages(JsonElement requestData)
         {
             Dictionary<string, Type> input = new Dictionary<string, Type> { { "groupName", typeof(string) } };
