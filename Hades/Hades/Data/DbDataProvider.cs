@@ -132,7 +132,7 @@ namespace Hades.Data
         
         public IQueryable<Message> GetGroupMessages(Group group)
         {
-            return applicationDbContext.Messages.Include("Author").Where(m => m.PostedInGroup.GroupId == group.GroupId);
+            return applicationDbContext.Messages.Include("Author").Where(m => m.PostedInGroup.GroupId == group.GroupId).OrderBy(g => g.TimeStamp);
         }
     }
 }
