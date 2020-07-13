@@ -1,6 +1,7 @@
 ﻿using Hades.Data;
 using Hades.Models;
 using Hades.Utils;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -23,12 +24,19 @@ namespace Hades.Controllers
         private ILogger<GroupController> logger;
         private DbDataProvider dbDataProvider;
         private ControllerUtils controllerUtils;
+        private UserManager<ApplicationUser> userManager;
 
-        public GroupController(ILogger<GroupController> logger, DbDataProvider dbDataProvider, ControllerUtils controllerUtils)
+        public GroupController(
+            ILogger<GroupController> logger,
+            DbDataProvider dbDataProvider,
+            ControllerUtils controllerUtils,
+            UserManager<ApplicationUser> userManager
+            )
         {
             this.logger = logger;
             this.dbDataProvider = dbDataProvider;
             this.controllerUtils = controllerUtils;
+            this.userManager = userManager;
         }
 
         /// <summary>
@@ -62,14 +70,14 @@ namespace Hades.Controllers
                 else
                 {
                     logger.LogInformation("Could NOT get group members - group not found: " + groupName);
-                    return new JsonResult(new { Result = false, Message = "Could NOT get group members - group not found: " + groupName });
+                    return new JsonResult(new { Result = false, Message = "Could NOT get group members." });
                 }
                 
             }
             else
             {
-                logger.LogInformation("Could NOT get messages - invalid request data.");
-                return new JsonResult(new { Result = false, Message = "Could NOT get messages - invalid request data." });
+                logger.LogInformation("Could NOT get messages. Could NOT unwrap JSON.");
+                return new JsonResult(new { Result = false, Message = "Could NOT get messages." });
             }
         }
 
@@ -104,13 +112,13 @@ namespace Hades.Controllers
                 else
                 {
                     logger.LogInformation("Could NOT get messages - group not found: " + groupName);
-                    return new JsonResult(new { Result = false, Message = "Could NOT get messages - group not found: " + groupName });
+                    return new JsonResult(new { Result = false, Message = "Could NOT get messages." });
                 }
             }
             else
             {
-                logger.LogInformation("Could NOT get messages - invalid request data.");
-                return new JsonResult(new { Result = false, Message = "Could NOT get messages - invalid request data." });
+                logger.LogInformation("Could NOT get messages. Could NOT unwrap JSON.");
+                return new JsonResult(new { Result = false, Message = "Could NOT get messages." });
             }
         }
 
@@ -155,7 +163,7 @@ namespace Hades.Controllers
             }
             else
             {
-                logger.LogError("Error occurred during group creation.");
+                logger.LogError("Error occurred during group creation. Could NOT unwrap JSON.");
                 return new JsonResult("Error occurred during group creation.");
             }
         }
@@ -182,7 +190,7 @@ namespace Hades.Controllers
             }
             else
             {
-                logger.LogError("Error occurred during group existence check.");
+                logger.LogError("Error occurred during group existence check. Could NOT unwrap JSON.");
                 return new JsonResult("Error occurred during group existence check.");
             }
         }
@@ -216,8 +224,48 @@ namespace Hades.Controllers
             }
             else
             {
-                logger.LogError("Error occurred during new user creation.");
+                logger.LogError("Error occurred during new user creation. Could NOT unwrap JSON.");
                 return new JsonResult("Error occurred during new user creation.");
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(JsonElement requestData)
+        {
+            // Unwrap data
+            Dictionary<string, Type> input = new Dictionary<string, Type> {
+                { "userId", typeof(string) }
+            };
+            Dictionary<string, object> result = controllerUtils.UnwrapJsonRequest(input, requestData);
+
+            if (result != null)
+            {
+                // Create new user
+                string userId = (string)result["userId"];
+                ApplicationUser applicationUser = await userManager.FindByIdAsync(userId);
+                if (applicationUser != null)
+                {
+                    if (userManager.DeleteAsync(applicationUser).Result.Succeeded)
+                    {
+                        return new JsonResult(new { Result = true, ResultText = "User successfully deleted." });
+                    }
+                    else
+                    {
+                        logger.LogError("Error occurred during deleting user. Delete operation failed for user with Id: " + userId);
+                        return new JsonResult(new { Result = false, ResultText = "Error occurred during deleting user. Please try again later." });
+                    }
+                }
+                else
+                {
+                    logger.LogError("Error occurred during deleting user. User NOT found: " + userId);
+                    return new JsonResult(new { Result = false, ResultText = "Error occurred during deleting user. Please try again later. If the problem persists, please contact the web administration." });
+                }
+                
+            }
+            else
+            {
+                logger.LogError("Error occurred during deleting user. Could NOT unwrap JSON.");
+                return new JsonResult("Error occurred during deleting user. Please try again later. If the problem persists, please contact the web administration.");
             }
         }
 
