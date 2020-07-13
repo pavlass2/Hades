@@ -5,8 +5,8 @@
             <div class="flex"> <a class="item-author text-color" data-abc="true"><b>Připojeno: {{ numberOfUsers }}</b></a></div>
         </div>
         
-        <div *ngFor="let user of userListName; let i = index" class="list-item block">
-            <div><a><span class="w-40 avatar {{ randomVals[i] }}">{{ userListName[i][0] }}</span></a></div>
+        <div *ngFor="let user of userListName; let i = index" class="list-item block" [ngStyle]="i == 0 &&{'background-color': '	#87CEFA'}">
+            <div ><a><span class="w-40 avatar {{ randomVals[i] }}">{{ userListName[i][0] }}</span></a></div>
             <div class="flex"> <a class="item-author text-color" data-abc="true">{{ user }}</a></div>
         </div>
     </div>
