@@ -4,6 +4,10 @@
         <button class="btn btn-info" [routerLink]="['/main/joinGroup']" routerLinkActive="router-link-active" > {{ joinButton }} </button><br><br>
         <button class="btn btn-info" [routerLink]="['/main/createGroup']" routerLinkActive="router-link-active" > {{ createButton }} </button>
     </div>
+
+    <div class="buttonPositionDown" *ngIf="isActive">
+        <button class="btn btn-info" [routerLink]="['/mainRoom']" routerLinkActive="router-link-active" > {{ nameRoom }} </button><br><br>
+    </div>
 </div>
 
 

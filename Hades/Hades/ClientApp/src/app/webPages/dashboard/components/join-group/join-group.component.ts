@@ -28,6 +28,7 @@ export class JoinGroupComponent implements OnInit {
 
   ngOnInit(): void {
     this.title.setTitle(this.titleVar);
+    this.cookie.deleteAll();
   }
 
   onSubmit(){

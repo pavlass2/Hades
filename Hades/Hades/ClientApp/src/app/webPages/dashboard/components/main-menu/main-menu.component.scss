@@ -14,3 +14,12 @@
     background: rgb(108,0,203);
     background: linear-gradient(90deg, rgba(108,0,203,1) 0%, rgba(81,57,198,1) 94%);
 }
+
+.buttonPositionDown{
+    margin: 0;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    -ms-transform: translate(-50%, -30%);
+    transform: translate(-50%, -30%);
+}

@@ -52,7 +52,6 @@ export class ChatWindowComponent implements OnInit{
           message.message = message.value.message;
           message.nickName = message.value.nickName;
           this.messages = this.messageAry.write(message);
-          console.log(this.messages);
       });  
     }, error => {
       console.log(error);
@@ -62,10 +61,8 @@ export class ChatWindowComponent implements OnInit{
 
   loadHistory(){
     this.backendcall.getMessagesHistory(this.cookie.get("groupNameCookie")).subscribe( resMsg => {
-      console.log(resMsg);
       resMsg.forEach(element => {
         var messageIter = new Message(); 
-        console.log(element)
         messageIter.date = element.date;
         messageIter.message = element.message;
         messageIter.nickName = element.nickName;
