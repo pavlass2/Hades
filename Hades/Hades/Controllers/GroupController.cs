@@ -185,7 +185,7 @@ namespace Hades.Controllers
             {
                 // Check if group already exists
                 groupName = (string)result["groupName"];
-                logger.LogInformation("Group existence check: " + groupName);
+                logger.LogInformation("Group existence check successful: " + groupName);
                 return new JsonResult(new { Result = dbDataProvider.DoesGroupExist(groupName) });
             }
             else
@@ -247,6 +247,7 @@ namespace Hades.Controllers
                 {
                     if (userManager.DeleteAsync(applicationUser).Result.Succeeded)
                     {
+                        logger.LogError("Delete operation successful for user with Id: " + userId);
                         return new JsonResult(new { Result = true, ResultText = "User successfully deleted." });
                     }
                     else
@@ -266,6 +267,48 @@ namespace Hades.Controllers
             {
                 logger.LogError("Error occurred during deleting user. Could NOT unwrap JSON.");
                 return new JsonResult("Error occurred during deleting user. Please try again later. If the problem persists, please contact the web administration.");
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteGroup(JsonElement requestData)
+        {
+            string groupName = "";
+            // Unwrap data
+            Dictionary<string, Type> input = new Dictionary<string, Type> { { "groupName", groupName.GetType() } };
+            Dictionary<string, object> result = controllerUtils.UnwrapJsonRequest(input, requestData);
+
+            if (result != null)
+            {
+                // Check if group already exists
+                groupName = (string)result["groupName"];
+                logger.LogInformation("Group existence check successful: " + groupName);
+                Group group = dbDataProvider.GetGroup(groupName);
+                if (group != null)
+                {
+                    bool deletionSuccessful = await dbDataProvider.DeleteGroup(group);
+
+                    if (deletionSuccessful)
+                    {
+                        logger.LogInformation("Delete operation successful for group: " + groupName);
+                        return new JsonResult(new { Result = true, ResultText = "Group and all of its members successfully deleted. Even Columbo wouldn't find anything now." });
+                    }
+                    else
+                    {
+                        logger.LogError("Error occurred during group deletion. Cound NOT delete group.", groupName);
+                        return new JsonResult(new { Result = false, ResultText = "Error occurred during deleting group. Please try again later. If the problem persists, please contact the web administration." });
+                    }
+                }
+                else
+                {
+                    logger.LogError("Error occurred during group deletion. Group NOT found.", groupName);
+                    return new JsonResult(new { Result = false, ResultText = "Error occurred during deleting group. Please try again later. If the problem persists, please contact the web administration." });
+                }                
+            }
+            else
+            {
+                logger.LogError("Error occurred during group deletion. Could NOT unwrap JSON.");
+                return new JsonResult(new { Result = false, ResultText = "Error occurred during deleting group. Please try again later. If the problem persists, please contact the web administration." });
             }
         }
 
