@@ -50,7 +50,7 @@ namespace Hades.Data
         /// <returns>Founded group.</returns>
         public Group GetGroup(string groupName)
         {
-            return applicationDbContext.Groups.Include("Founder").FirstOrDefault(g => g.Name.Equals(groupName));
+            return applicationDbContext.Groups.Include("Founder").Include("Students").FirstOrDefault(g => g.Name.Equals(groupName));
         }
 
         /// <summary>
@@ -144,30 +144,35 @@ namespace Hades.Data
 
         public async Task<bool> DeleteGroup(Group group)
         {
+            // Prepare ids for deletion
+            string[] studentIds = group.Students.Select(s => s.StudentId).ToArray();
+            ApplicationUser founder = group.Founder;
+
+            // Delete group
             applicationDbContext.Groups.Remove(group);
             await applicationDbContext.SaveChangesAsync();
 
-            IdentityResult result = new IdentityResult();
-
-            ApplicationUser[] students = GetGroupStudents(group).ToArray();
-            foreach (ApplicationUser student in students)
+            // Delete students
+            foreach (string id in studentIds)
             {
-                result = await userManager.DeleteAsync(student);
-
-                if (result.Succeeded == false)
+                ApplicationUser student = await userManager.FindByIdAsync(id);
+                IdentityResult studentResult = await userManager.DeleteAsync(student);
+                if (studentResult.Succeeded == false)
                 {
-                    logger.LogError("Deleting student failed. Id: " + student.Id);
+                    logger.LogError("Deleting student failed. Id: " + id);
                     return false;
                 }
             }
 
-            result = await userManager.DeleteAsync(group.Founder);
-
-            if (result.Succeeded == false)
+            // Delete founder
+            IdentityResult founderResult = await userManager.DeleteAsync(group.Founder);
+            if (founderResult.Succeeded == false)
             {
                 logger.LogError("Deleting founder failed. Id: " + group.Founder.Id);
                 return false;
             }
+
+            
 
             return true;
         }

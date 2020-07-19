@@ -82,7 +82,7 @@ namespace Hades.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetGroupMessages(JsonElement requestData)
+        public async Task<IActionResult> GetGroupMessages(JsonElement requestData)
         {
             // Unwrap data.
             Dictionary<string, Type> input = new Dictionary<string, Type> { { "groupName", typeof(string) } };
@@ -92,7 +92,7 @@ namespace Hades.Controllers
             {
                 // Get group and its messages from DB.
                 string groupName = (string)result["groupName"];
-                IQueryable<Message> messages = dbDataProvider.GetGroupMessages(dbDataProvider.GetGroup(groupName));
+                Message[] messages = await dbDataProvider.GetGroupMessages(dbDataProvider.GetGroup(groupName)).ToArrayAsync();
 
                 if (messages != null)
                 {
@@ -247,18 +247,18 @@ namespace Hades.Controllers
                 {
                     if (userManager.DeleteAsync(applicationUser).Result.Succeeded)
                     {
-                        logger.LogError("Delete operation successful for user with Id: " + userId);
+                        logger.LogInformation("Delete operation successful for user with Id: ", userId);
                         return new JsonResult(new { Result = true, ResultText = "User successfully deleted." });
                     }
                     else
                     {
-                        logger.LogError("Error occurred during deleting user. Delete operation failed for user with Id: " + userId);
+                        logger.LogError("Error occurred during deleting user. Delete operation failed for user with Id: ", userId);
                         return new JsonResult(new { Result = false, ResultText = "Error occurred during deleting user. Please try again later." });
                     }
                 }
                 else
                 {
-                    logger.LogError("Error occurred during deleting user. User NOT found: " + userId);
+                    logger.LogError("Error occurred during deleting user. User NOT found: ", userId);
                     return new JsonResult(new { Result = false, ResultText = "Error occurred during deleting user. Please try again later. If the problem persists, please contact the web administration." });
                 }
                 
