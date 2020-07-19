@@ -49,4 +49,17 @@ export class BackendcallService {
     return this.httpClient.delete<DeleteModel>(apiUrl + '/api/Group/DeleteUser', options);
   }
 
+  deteleGroup(groupName: string){
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      body: {
+        groupName: groupName
+      }
+    }
+  
+    return this.httpClient.delete<DeleteModel>(apiUrl + '/api/Group/DeleteGroup', options);
+  }
+
 }

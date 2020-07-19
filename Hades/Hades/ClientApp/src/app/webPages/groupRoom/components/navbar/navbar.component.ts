@@ -40,23 +40,44 @@ export class NavbarComponent implements OnInit {
       this.userName = this.userText + "ERROR";
     }
 
+
   }
 
   closeGroup(){
-    this.backendcall.deteleUser(this.cookie.get("userId")).subscribe( res => {
-      console.log(res);
-      if(res.result){
-        this.toust.showSuccess("Success", res.resultText);
-        this.cookie.deleteAll();
-        this.router.navigate(["/main"]);
-      }else{
-        this.toust.showError("Error",res.resultText);
-      }
+    if(this.cookie.check("founder")){
+      console.log(this.cookie.get("groupNameCookie"));
+      this.backendcall.deteleGroup(this.cookie.get("groupNameCookie")).subscribe( res => {
+        console.log(res);
+        if(res.result){
+          this.toust.showSuccessDeleteGroup("Success", res.resultText);
+          this.cookie.deleteAll();
+          this.router.navigate(["/main"]);
+        }else{
+          this.toust.showError("Error",res.resultText);
+        }
+  
+      }, error => {
+        console.log(error);
+        this.toust.showError("An error!", "Be kind and try again later!");
+      });
 
-    }, error => {
-      console.log(error);
-      this.toust.showError("An error!", "Be kind and try again later!");
-    });
+    }else{
+      this.backendcall.deteleUser(this.cookie.get("userId")).subscribe( res => {
+        console.log(res);
+        if(res.result){
+          this.toust.showSuccess("Success", res.resultText);
+          this.cookie.deleteAll();
+          this.router.navigate(["/main"]);
+        }else{
+          this.toust.showError("Error",res.resultText);
+        }
+  
+      }, error => {
+        console.log(error);
+        this.toust.showError("An error!", "Be kind and try again later!");
+      });
+    }
+    
 
   }
 

@@ -50,6 +50,7 @@ export class CreateGroupComponent implements OnInit {
         this.cookie.set("userNameCookie", this.inputField.userName);
         this.cookie.set("groupNameCookie", this.inputField.groupName);
         this.cookie.set("userId", res.userId);
+        this.cookie.set("founder","1");
         this.router.navigate(['mainRoom']);
       }else{
         this.toastr.showError("Chyba!", res.message);

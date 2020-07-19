@@ -16,5 +16,11 @@ export class ToastrServiceService {
     this.toastr.error(textVal, headline);
   }
 
+  showSuccessDeleteGroup(headline: string, textVal: string) {
+    this.toastr.success(textVal, headline, {
+      timeOut: 3000,
+    });
+  }
+
 
 }
