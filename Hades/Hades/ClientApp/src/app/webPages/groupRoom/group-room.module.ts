@@ -10,21 +10,26 @@ import { UserListComponent } from './components/user-list/user-list.component';
 import { MessageInputComponent } from './components/message-input/message-input.component';
 import { FormsModule } from '@angular/forms';
 import { ChatWindowComponent } from './components/chat-window/chat-window.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component'
+import { ConfirmDialogService } from 'src/app/core/services/confirm-dialog.service';
 
 
 @NgModule({
   declarations: [
     MainRoomComponent, 
     NavbarComponent, 
-    FooterComponent, WorkingSpaceComponent, UserListComponent, MessageInputComponent, ChatWindowComponent
+    FooterComponent, WorkingSpaceComponent, UserListComponent, MessageInputComponent, ChatWindowComponent, ConfirmModalComponent
   ],
   imports: [
     CommonModule,
     GroupRoomRoutingModule,
     FormsModule,
     FontAwesomeModule
-  ]
+  ],
+  providers:[  
+    ConfirmDialogService  
+ ]  
 })
 export class GroupRoomModule { 
 }

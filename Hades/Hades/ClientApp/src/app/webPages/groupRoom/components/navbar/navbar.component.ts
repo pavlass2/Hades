@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Testability } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { BackendcallService } from 'src/app/core/httpsCalls/backendcall.service';
 
 import { ToastrServiceService } from 'src/app/core/notifications/toastr-service.service';
+import { ConfirmDialogService } from 'src/app/core/services/confirm-dialog.service';
+import { exit } from 'process';
 
 @Component({
   selector: 'app-navbar',
@@ -18,12 +20,15 @@ export class NavbarComponent implements OnInit {
 
   groupName: string;
   userName: string;
+  intervalId;
+
 
   constructor(
     private cookie: CookieService,
     private router: Router,
     private backendcall: BackendcallService,
-    private toust: ToastrServiceService
+    private toust: ToastrServiceService,
+    private confirmDialogService: ConfirmDialogService
   ) { }
 
 
@@ -39,13 +44,44 @@ export class NavbarComponent implements OnInit {
     }else{
       this.userName = this.userText + "ERROR";
     }
+    localStorage.removeItem("deleteBoolConfirm");
 
 
   }
 
   closeGroup(){
+
+
+
+    this.confirmDialogService.confirmThis("Are you sure to close group?", function () {  
+      localStorage.setItem("deleteBoolConfirm", "true");
+    }, function () {  
+      localStorage.setItem("deleteBoolConfirm", "false");
+    }).subscribe(res => {    
+    });
+
+    this.intervalId = setInterval(data => {
+      if(localStorage.getItem("deleteBoolConfirm") == null){
+      }else{
+        if(localStorage.getItem("deleteBoolConfirm") == "true"){
+          clearInterval(this.intervalId);
+          this.closeIt();
+          exit;
+        }
+        
+      }
+      }, 100);
+
+
+    
+    
+
+  }
+
+  closeIt(){
+    
+    console.log("ZAVIRAM")
     if(this.cookie.check("founder")){
-      console.log(this.cookie.get("groupNameCookie"));
       this.backendcall.deteleGroup(this.cookie.get("groupNameCookie")).subscribe( res => {
         console.log(res);
         if(res.result){
@@ -77,8 +113,10 @@ export class NavbarComponent implements OnInit {
         this.toust.showError("An error!", "Be kind and try again later!");
       });
     }
-    
+  }
 
+  ngOnDestroy() {
+    clearInterval(this.intervalId);
   }
 
 }
