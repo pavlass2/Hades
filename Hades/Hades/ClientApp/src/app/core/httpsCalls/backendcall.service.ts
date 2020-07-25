@@ -36,13 +36,14 @@ export class BackendcallService {
     return this.httpClient.post<any>(apiUrl + '/api/Group/GetGroupMessages', {groupName});
   }
 
-  deteleUser(userId: string){
+  deteleUser(userId: string, groupName: string){
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       }),
       body: {
-        userId: userId
+        userId: userId,
+        groupName: groupName
       }
     }
   

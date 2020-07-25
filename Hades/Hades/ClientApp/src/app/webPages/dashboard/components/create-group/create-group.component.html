@@ -3,16 +3,19 @@
     <div class="formBox buttonPosition">
         <form #f="ngForm" class="form-group" (ngSubmit)="onSubmit()" autocomplete="off">
             <p>
+                <i class="material-icons"><fa-icon [icon]="faUserCircle"></fa-icon></i>&nbsp;
                 <label>{{ user }} &nbsp;</label>
                 <input type="text" name="input1" class="form-control"  [(ngModel)]="inputField.userName" required>
             </p>
 
             <p>
+                <i class="material-icons"><fa-icon [icon]="faObjectGroup"></fa-icon></i>&nbsp;
                 <label>{{ group }} &nbsp;</label>
                 <input type="text" name="input2" class="form-control" [(ngModel)]="inputField.groupName" required>
             </p>
 
             <p>
+                <i class="material-icons"><fa-icon [icon]="faQuestionCircle"></fa-icon></i>&nbsp;
                 <label>{{ description }} &nbsp;</label>
                 <textarea type="text" style="max-height: 200px; overflow: auto; height: 200px;" name="input3" class="form-control" [(ngModel)]="inputField.groupDescription" required></textarea>
             </p>

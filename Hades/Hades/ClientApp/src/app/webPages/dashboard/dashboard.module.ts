@@ -9,6 +9,7 @@ import { CreateGroupComponent } from './components/create-group/create-group.com
 import { JoinGroupComponent } from './components/join-group/join-group.component';
 import { UserNameComponent } from './components/user-name/user-name.component';
 import { LanguageOptionsComponent } from './components/language-options/language-options.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 
@@ -23,7 +24,8 @@ import { LanguageOptionsComponent } from './components/language-options/language
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    FormsModule
+    FormsModule,
+    FontAwesomeModule
   ]
 })
 export class DashboardModule { }

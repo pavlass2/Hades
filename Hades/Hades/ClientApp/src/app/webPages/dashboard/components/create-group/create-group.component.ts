@@ -4,6 +4,7 @@ import { Title } from '@angular/platform-browser';
 import { ToastrServiceService } from "../../../../core/notifications/toastr-service.service"
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { faUserCircle,faObjectGroup, faQuestionCircle } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-create-group',
@@ -11,6 +12,10 @@ import { CookieService } from 'ngx-cookie-service';
   styleUrls: ['./create-group.component.scss']
 })
 export class CreateGroupComponent implements OnInit {
+
+  faUserCircle =faUserCircle;
+  faObjectGroup = faObjectGroup;
+  faQuestionCircle = faQuestionCircle;
 
   //text
   user = "Uživatelské jméno: ";

@@ -98,7 +98,7 @@ export class NavbarComponent implements OnInit {
       });
 
     }else{
-      this.backendcall.deteleUser(this.cookie.get("userId")).subscribe( res => {
+      this.backendcall.deteleUser(this.cookie.get("userId"), this.cookie.get("groupNameCookie")).subscribe( res => {
         console.log(res);
         if(res.result){
           this.toust.showSuccess("Success", res.resultText);
