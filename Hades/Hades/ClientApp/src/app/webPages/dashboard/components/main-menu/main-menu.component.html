@@ -8,6 +8,10 @@
     <div class="buttonPositionDown" *ngIf="isActive">
         <button class="btn btn-info" [routerLink]="['/mainRoom']" routerLinkActive="router-link-active" > {{ nameRoom }} </button><br><br>
     </div>
+
+    <div class="languagePosition">
+        <app-language-options></app-language-options>
+    </div>
 </div>
 
 

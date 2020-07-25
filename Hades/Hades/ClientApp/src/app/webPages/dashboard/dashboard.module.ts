@@ -8,6 +8,7 @@ import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { CreateGroupComponent } from './components/create-group/create-group.component';
 import { JoinGroupComponent } from './components/join-group/join-group.component';
 import { UserNameComponent } from './components/user-name/user-name.component';
+import { LanguageOptionsComponent } from './components/language-options/language-options.component';
 
 
 
@@ -16,7 +17,8 @@ import { UserNameComponent } from './components/user-name/user-name.component';
   MainMenuComponent,
   CreateGroupComponent,
   JoinGroupComponent,
-  UserNameComponent
+  UserNameComponent,
+  LanguageOptionsComponent
 ],
   imports: [
     CommonModule,
