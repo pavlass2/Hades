@@ -3,6 +3,7 @@ using Hades.Models;
 using Hades.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -25,18 +26,21 @@ namespace Hades.Controllers
         private DbDataProvider dbDataProvider;
         private ControllerUtils controllerUtils;
         private UserManager<ApplicationUser> userManager;
+        private readonly IHubContext<ChatHub> hubContext;
 
         public GroupController(
             ILogger<GroupController> logger,
             DbDataProvider dbDataProvider,
             ControllerUtils controllerUtils,
-            UserManager<ApplicationUser> userManager
+            UserManager<ApplicationUser> userManager,
+            IHubContext<ChatHub> hubContext
             )
         {
             this.logger = logger;
             this.dbDataProvider = dbDataProvider;
             this.controllerUtils = controllerUtils;
             this.userManager = userManager;
+            this.hubContext = hubContext;
         }
 
         /// <summary>
@@ -234,7 +238,8 @@ namespace Hades.Controllers
         {
             // Unwrap data
             Dictionary<string, Type> input = new Dictionary<string, Type> {
-                { "userId", typeof(string) }
+                { "userId", typeof(string) },
+                { "groupName", typeof(string) }
             };
             Dictionary<string, object> result = controllerUtils.UnwrapJsonRequest(input, requestData);
 
@@ -242,13 +247,23 @@ namespace Hades.Controllers
             {
                 // Create new user
                 string userId = (string)result["userId"];
+                string groupName = (string)result["groupName"];
                 ApplicationUser applicationUser = await userManager.FindByIdAsync(userId);
                 if (applicationUser != null)
                 {
                     if (userManager.DeleteAsync(applicationUser).Result.Succeeded)
                     {
-                        logger.LogInformation("Delete operation successful for user with Id: ", userId);
-                        return new JsonResult(new { Result = true, ResultText = "User successfully deleted." });
+                        if (dbDataProvider.DoesGroupExist(groupName))
+                        {
+                            await hubContext.Clients.Group(groupName).SendAsync("NewUserConnected", new JsonResult(new { UserName = "" }));
+                            logger.LogInformation("Delete operation successful for user with Id: ", userId);
+                            return new JsonResult(new { Result = true, ResultText = "User successfully deleted." });
+                        }
+                        else
+                        {
+                            logger.LogError("Error occurred during deleting user. User was deleted but his group was NOT found: ", groupName);
+                            return new JsonResult(new { Result = false, ResultText = "Error occurred during deleting user. Please try again later." });
+                        }
                     }
                     else
                     {
