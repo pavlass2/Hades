@@ -16,6 +16,7 @@ export class UserNameComponent implements OnInit {
   userName: string;
   send = "Vstoupit";
   titleVar = "Hades - nastav jméno";
+  back = "Zpět";
 
   constructor(
     private backendCall: BackendcallService,

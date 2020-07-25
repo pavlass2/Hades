@@ -18,6 +18,7 @@ export class CreateGroupComponent implements OnInit {
   description = "Popisek: ";
   newGroupTitle = "Hades - nová skupina";
   send = "Odeslat";
+  back = "Zpět";
 
 
   inputField = {

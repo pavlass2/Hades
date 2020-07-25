@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { BackendcallService } from 'src/app/core/httpsCalls/backendcall.service';
 import { CookieService } from 'ngx-cookie-service';
+import { ChatService } from 'src/app/core/signalR/chat.service';
+import { NewUser } from "../../../../core/models/newUser";
 
 @Component({
   selector: 'user-list',
@@ -17,8 +19,12 @@ export class UserListComponent implements OnInit {
 
   constructor(
     private backendcall: BackendcallService,
-    private cookie: CookieService
-  ) {}
+    private cookie: CookieService,
+    private chatService: ChatService,
+    private _ngZone: NgZone
+  ) {
+    this.subscribeToUserConnection();
+  }
 
   ngOnInit(): void {
 
@@ -29,6 +35,19 @@ export class UserListComponent implements OnInit {
     
 
   }
+
+  private subscribeToUserConnection(): void {  
+    console.log("USER?")
+    this.chatService.newUserConnected.subscribe((connUser: NewUser) => {  
+      console.log(connUser.value.userName);
+      this._ngZone.run(() => {  
+        this.color = true;
+        this.getData(this.color);
+      });  
+    }, error => {
+      console.log(error);
+    });  
+  }  
 
   randomIntFromInterval(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min);

@@ -29,12 +29,15 @@ export class ChatWindowComponent implements OnInit{
     private backendcall: BackendcallService
   ) {
     this.subscribeToEvents();
+    
   }
 
   ngOnInit(){
     this.messages = this.messageAry.get();
     this.userId = this.cookie.get("userId");
     this.loadHistory();
+
+    
 
   }
 
@@ -73,8 +76,16 @@ export class ChatWindowComponent implements OnInit{
         }
         this.messages = this.messageAry.write(messageIter);
       });
-
+      this.clientConnect();
     })
+  }
+
+  clientConnect(){
+    this.message = new Message();  
+    this.message.userId = this.userId;
+    this.message.groupName = this.cookie.get("groupNameCookie");
+      
+    this.chatService.connectClient(this.message);
   }
 
 

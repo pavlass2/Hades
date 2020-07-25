@@ -17,9 +17,13 @@
                 <textarea type="text" style="max-height: 200px; overflow: auto; height: 200px;" name="input3" class="form-control" [(ngModel)]="inputField.groupDescription" required></textarea>
             </p>
 
-            <p class="text-right">
-                <button type="submit" class="btn btn-info" [disabled]="!f.valid"> {{ send }}</button>
-            </p>
+            <div>
+                <a class="backButton" href="" [routerLink]="['/main']">{{ back }}</a>
+               <button type="submit" class="btn btn-info sendRight" [disabled]="!f.valid"> {{ send }}</button>
+            </div>
+
+
+
 
         </form>
     </div>

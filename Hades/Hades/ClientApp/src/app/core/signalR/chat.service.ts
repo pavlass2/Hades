@@ -3,6 +3,8 @@ import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 import { Message } from '../models/chatModel'; 
 import { apiUrl } from '../models/url';
 import * as signalR from '@aspnet/signalr';
+import { NewUser } from "../models/newUser";
+
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +12,7 @@ import * as signalR from '@aspnet/signalr';
 export class ChatService {
 
   messageReceived = new EventEmitter<Message>();  
+  newUserConnected = new EventEmitter<NewUser>();
   connectionEstablished = new EventEmitter<Boolean>();  
   
   private connectionIsEstablished = false;  
@@ -18,12 +21,17 @@ export class ChatService {
   constructor() {  
     this.createConnection();  
     this.registerOnServerEvents();  
+    this.registerNewUserConnection();
     this.startConnection();  
   }  
   
   sendMessage(message: Message) {  
     this._hubConnection.invoke('SendMessage', message);  
   }  
+
+  connectClient(message: Message) {  
+    this._hubConnection.invoke('ConnectClient', message);  
+  } 
   
   private createConnection() {   
     this._hubConnection = new HubConnectionBuilder()  
@@ -52,4 +60,10 @@ export class ChatService {
       this.messageReceived.emit(data);  
     });  
   }  
+
+  private registerNewUserConnection(): void{
+    this._hubConnection.on('NewUserConnected', (data: any) => {  
+      this.newUserConnected.emit(data);  
+    }); 
+  }
 }

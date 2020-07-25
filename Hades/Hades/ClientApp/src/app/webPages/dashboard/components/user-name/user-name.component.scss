@@ -19,7 +19,17 @@
     border-radius: 25px;
     padding: 30px;
     width: 250px;
-    height: 175px;
+    height: 210px;
     background-color: white;
     
+}
+
+.backButton{
+    margin: 0;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    -ms-transform: translate(-50%, -60%);
+    transform: translate(-50%, -60%);
+    color: gray;
 }

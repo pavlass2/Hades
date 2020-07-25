@@ -16,6 +16,7 @@ export class JoinGroupComponent implements OnInit {
   inputText = "Zadej název místnosti: ";  
   groupName: string;
   send = "Připojit se";
+  back = "Zpět";
   titleVar = " Hades - připojit se"
 
   constructor(
